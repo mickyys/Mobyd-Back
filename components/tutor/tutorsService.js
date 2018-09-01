@@ -5,8 +5,8 @@ var tutor = require('./tutorsController');
 var api = express.Router();
 
 api.get('/:id?', tutor.getTutor);
-//api.post('/', paciente.savePaciente);
-//api.put('/', paciente.updPaciente);
-//api.delete('/:id/:user', paciente.delPaciente);
+api.post('/', tutor.saveTutor);
+api.put('/', tutor.updTutor);
+api.delete('/:id/:user', tutor.delTutor);
 
 module.exports = api;

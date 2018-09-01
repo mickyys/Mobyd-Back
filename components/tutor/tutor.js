@@ -8,14 +8,19 @@ var tutorSchemma = Schema({
     dv : String,
     name : String,
     lastName : String,
-    Adress : String,
+    address : String,
     phone : Number,
     localtion : String,
-    city : String,
-    cityId : { type: Mongoose.Schema.Types.ObjectId, ref: 'city' },
+    commune : String,
+    communeId : Number, // { type: Mongoose.Schema.Types.ObjectId, ref: 'comuna' },
     email : String,
     photo : String,
-    vip : Number
+    vip : Number,
+    userCreate : String,
+    userModify : String,
+    dateCreate : {type: Date, default: Date.now},
+    dateModify : {type: Date, default: Date.now} ,
+    status : { type : Number, default: 1} 
 });
 
 module.exports = Mongoose.model('tutor', tutorSchemma);
