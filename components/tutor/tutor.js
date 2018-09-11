@@ -4,13 +4,13 @@ var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
 var tutorSchemma = Schema({
-    rut : Number,
-    dv : String,
+    rutDv: String,
     name : String,
     lastName : String,
     address : String,
     phone : Number,
-    localtion : String,
+    birthDate : Date,
+    location : String,
     commune : String,
     communeId : Number, // { type: Mongoose.Schema.Types.ObjectId, ref: 'comuna' },
     email : String,
@@ -23,4 +23,4 @@ var tutorSchemma = Schema({
     status : { type : Number, default: 1} 
 });
 
-module.exports = Mongoose.model('tutor', tutorSchemma);
+module.exports = Mongoose.model('tutors', tutorSchemma);

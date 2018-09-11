@@ -72,16 +72,14 @@ function getTutor(req, res) {
 function saveTutor(req, res) {
     var params = req.body;
 
-    console.log(params);
-
-    var tutor = new Tutor({
-        rut: params.rut,
-        dv: params.dv,
+    var tutor = new Tutor({ 
+        rutDv: params.rutDV,
         name: params.name,
         lastName: params.lastName,
+        birthDate : params.birthDate,
         address: params.address,
         phone: params.phone,
-        localtion: params.localtion,
+        location: params.location,
         commune: params.commune,
         communeId: params.communeId,
         email: params.email,
@@ -115,34 +113,15 @@ function saveTutor(req, res) {
 function updTutor(req, res) {
     var params = req.body;
     var id = params._id;
-    /*
-    var tutor = new Tutor({
-        rut: params.rut,
-        dv: params.dv,
-        name: params.name,
-        lastName: params.lastName,
-        address: params.address,
-        phone: params.phone,
-        localtion: params.localtion,
-        commune: params.commune,
-        communeId: params.communeId,
-        email: params.email,
-        photo: params.photo,
-        vip: params.vip,
-        userModify: params.user,
-        dateModify: Date.now()
-    });
-
-    console.log(params);*/
     
     Tutor.findByIdAndUpdate({
         _id: id
     }, {
         $set: {
-            rut: params.rut,
-            dv: params.dv,
+            rutDv: params.rutDv,
             name: params.name,
             lastName: params.lastName,
+            birthDate : params.birthDate,
             address: params.address,
             phone: params.phone,
             localtion: params.localtion,

@@ -92,9 +92,9 @@ function savePaciente(req, res){
 function updPaciente(req, res){
 
     var params = req.body;
-    var id = params._id;
+    var id = params._id; 
 
-    var patient = new Patient({
+    Patient.findByIdAndUpdate(id, {$set: {
         name : params.name,
         species : params.species,
         speciesType : params.speciesType,     
@@ -110,9 +110,8 @@ function updPaciente(req, res){
         death : params.death,
         userModify : params.user,
         dateModify : Date.now()
-    });   
-
-    Patient.findByIdAndUpdate(id, patient, (err, patientUpdate) =>{
+    }}
+    , (err, patientUpdate) =>{
         if(err){
             res.status(500).send({ message : 'Error al guardar el paciente' });
         }
