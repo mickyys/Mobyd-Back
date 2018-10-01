@@ -10,6 +10,45 @@ var Patient = require('./paciente');
  */
 var status = new Enum({'active': 1, 'noActive': 0});
 
+
+function getSearchPaciente(req, res){
+    let search = req.params.search;
+    console.log(search);
+
+    Patient.find()
+      .and([
+          { $or: [{'microchip': { $eq: search }  }] }         
+          // { $or: [{'name': {'$regex': search}} , {'microchip': {'$regex': search} }] }    
+      ])
+      .exec(function (err, patients) {
+        if(err){
+            res.status(500).send({message : 'Error en servidor'});
+        }
+
+        if(!patients){
+            res.status(404).send({message : 'No hay paciente'});
+        }
+
+        res.status(200).send({patients});
+      });
+
+    /* Patient.find({'status' : status.getValue('active') 
+                , 'name' : {'$regex': search} 
+                , 'microchip' : {'$regex': search} 
+                }
+    ,(err, patients) =>{
+        if(err){
+            res.status(500).send({message : 'Error en servidor'});
+        }
+
+        if(!patients){
+            res.status(404).send({message : 'No hay paciente'});
+        }
+
+        res.status(200).send({patients});
+    }); */
+}
+
 /**
  * Retorna información del paciente si contiene el ID, en caso de no traer retorna todos los pacientes activos
  * @param req The request contiene el ID enviado en la URL
@@ -21,7 +60,7 @@ function getPaciente(req, res){
     var id = req.params.id;
 
     if(id){
-        Patient.findById(id,(err,patient) =>{
+        Patient.findById(id, (err,patient) => {
             if(err){
                 res.status(500).send({message : 'Error en servidor al obtener paciente'});
             }
@@ -34,7 +73,7 @@ function getPaciente(req, res){
 
         });
     }else{
-        Patient.find({'status' : status.getValue('active')},(err, patients) =>{
+        Patient.find({'status' : status.getValue('active')},'name birthDate race.raza sex microchip',(err, patients) =>{
             if(err){
                 res.status(500).send({message : 'Error en servidor'});
             }
@@ -62,7 +101,7 @@ function savePaciente(req, res){
         speciesType : params.speciesType,     
         birthDate : params.birthDate,
         race : params.race,
-        raceType : params.raceType,
+    //    raceType : params.raceType,
         sex : params.sex,
         microchip : params.microchip,
         photo : params.photo,
@@ -74,6 +113,8 @@ function savePaciente(req, res){
         userModify : params.user
     });
 
+    console.log("patientStore");
+    console.log(patient);
     patient.save((err, patientStore)=>{
         if(err){
             res.status(500).send({ message : 'Error al guardar el paciente' });
@@ -146,6 +187,7 @@ function delPaciente(req, res){
 
 module.exports = {
     getPaciente,
+    getSearchPaciente,
     savePaciente,
     updPaciente,
     delPaciente

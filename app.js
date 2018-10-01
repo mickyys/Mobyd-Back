@@ -1,18 +1,30 @@
 'use strict'
 
-var express = require('express');
-var bodyParser = require('body-parser');
-var paciente = require('./components/paciente/pacientesService');
-var tutor = require('./components/tutor/tutorsService');
-var raza = require('./components/raza/razasService');
-var comunes = require('./components/comunes/comunesService');
+const express = require('express');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const paciente = require('./components/paciente/pacientesService');
+const tutor = require('./components/tutor/tutorsService');
+const raza = require('./components/raza/razasService');
+const comunes = require('./components/comunes/comunesService');
 
 var app = express();
-app.use(bodyParser.urlencoded({ extended : false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended : true }));
+app.use(express.json());
+app.use(express.static('public'));
+app.use(helmet());
 
-// Add headers
-app.use(function (req, res, next) {
+app.use(morgan('tiny'));
+//app.use(accessControl);
+
+app.use('/paciente', paciente);
+app.use('/tutor', tutor);
+app.use('/raza', raza);
+app.use('/comun', comunes);
+
+function accessControl(req, res, next)
+{
+    console.log("Access control ");
 
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -29,12 +41,6 @@ app.use(function (req, res, next) {
 
     // Pass to next layer of middleware
     next();
-});
-
-app.use('/paciente', paciente);
-app.use('/tutor', tutor);
-app.use('/raza', raza);
-app.use('/comun', comunes);
-
+}
 
 module.exports = app;

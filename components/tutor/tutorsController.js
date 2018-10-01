@@ -12,6 +12,34 @@ var status = new Enum({
     'noActive': 0
 });
 
+/**
+ * Retorna informacion del tutor por rut
+ * @param req The request contiene rut del tutor
+ * @param res The response retorna información del tutor
+ */
+function getTutorRut(req, res){
+    var rut = req.params.rut;
+
+    Tutor.findOne({'rutDV' : rut}, (err, tutor) =>{
+        if (err) {
+            res.status(500).send({
+                message: 'Error en servidor al obtener el tutor'
+               ,err
+            });
+        }
+        
+        if (tutor === null ) {
+            res.status(404).send({
+                message: 'No existe tutor'
+            });
+        }else{
+            res.status(200).send({
+                tutor
+            });
+        }       
+    });
+}
+
 
 /**
  * Retorna información del tutor si contiene el ID, en caso de no traer retorna todos los pacientes activos
@@ -33,12 +61,11 @@ function getTutor(req, res) {
                 res.status(404).send({
                     message: 'No existe tutor'
                 });
+            }else{
+                res.status(200).send({
+                    tutor
+                });
             }
-
-            res.status(200).send({
-                tutor
-            });
-
         });
     } else {
         Tutor.find({
@@ -55,10 +82,11 @@ function getTutor(req, res) {
                     message: 'No hay tutores'
                 });
             }
-
-            res.status(200).send({
-                tutors
-            });
+            else{
+                res.status(200).send({
+                    tutors
+                });
+            }            
         });
     }
 
@@ -73,7 +101,7 @@ function saveTutor(req, res) {
     var params = req.body;
 
     var tutor = new Tutor({ 
-        rutDv: params.rutDV,
+        rutDV: params.rutDV,
         name: params.name,
         lastName: params.lastName,
         birthDate : params.birthDate,
@@ -89,6 +117,8 @@ function saveTutor(req, res) {
         userModify: params.user,
         status: status.getValue('active')
     });
+
+    console.log(tutor);
 
     tutor.save((err, tutorStore) => {
         if (err) {
@@ -181,6 +211,7 @@ function delTutor(req, res) {
 
 module.exports = {
     getTutor,
+    getTutorRut,
     saveTutor,
     updTutor,
     delTutor

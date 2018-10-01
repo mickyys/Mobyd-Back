@@ -4,14 +4,14 @@ var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
 var tutorSchemma = Schema({
-    rutDv: String,
+    rutDV: String,
     name : String,
     lastName : String,
     address : String,
     phone : Number,
     birthDate : Date,
     location : String,
-    commune : String,
+    commune :  { type: Mongoose.Schema.Types.Mixed, ref: 'comuna'},
     communeId : Number, // { type: Mongoose.Schema.Types.ObjectId, ref: 'comuna' },
     email : String,
     photo : String,
