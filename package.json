@@ -19,6 +19,7 @@
   "homepage": "https://github.com/mickyys/Mobyd#readme",
   "dependencies": {
     "config": "^2.0.1",
+    "cors": "^2.8.4",
     "enum": "^2.5.0",
     "express": "^4.16.3",
     "helmet": "^3.13.0",

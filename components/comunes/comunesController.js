@@ -36,23 +36,63 @@ function getComunas(req, res) {
  * @param res The response information
  */
 function getLaboratorios(req, res) {
-    Laboratorio.find({}).sort('descripcion').exec((err, laboratorios) => {
-        if (err) {
-            res.status(500).send({
-                message: 'Error en servidor'
-            });
-        }
+    if (req.params.vacuna) {
 
-        if (!laboratorios) {
-            res.status(404).send({
-                message: 'No hay laboratorios'
-            });
-        }
+        Vacunas.findById(req.params.vacuna).exec((err, vacunas) => {
 
-        res.status(200).send({
-            laboratorios
+            if (err) {
+                res.status(500).send({
+                    message: 'Error en servidor'
+                });
+            }
+
+            if (!vacunas) {
+                res.status(404).send({
+                    message: 'No hay laboratorios para vacuna'
+                });
+            }
+
+            Laboratorio.findById({
+                '_id': vacunas.laboratorio
+            }).exec((err, laboratorios) => {
+                if (err) {
+                    res.status(500).send({
+                        message: 'Error en servidor'
+                    });
+                }
+
+                if (!laboratorios) {
+                    res.status(404).send({
+                        message: 'No hay laboratorios'
+                    });
+                }
+
+                res.status(200).send({
+                    laboratorios
+                });
+            });
         });
-    });
+
+
+    } else {
+        Laboratorio.find({}).sort('descripcion').exec((err, laboratorios) => {
+            if (err) {
+                res.status(500).send({
+                    message: 'Error en servidor'
+                });
+            }
+
+            if (!laboratorios) {
+                res.status(404).send({
+                    message: 'No hay laboratorios'
+                });
+            }
+
+            res.status(200).send({
+                laboratorios
+            });
+        });
+    }
 }
 
 /**
@@ -65,13 +105,14 @@ function addLaboratorios(req, res) {
     const SchemaValidate = {
         descripcion: Joi.string().min(3).required().label('Descripcion es obligatoria')
     }
-    
+
     Joi.validate(req.body, SchemaValidate, (err, data) => {
         if (err) {
             res.status(500).send({
-                error: err.details[0].context.label});
+                error: err.details[0].context.label
+            });
         } else {
-            var laboratorios = new Laboratorio(req.body);           
+            var laboratorios = new Laboratorio(req.body);
             laboratorios.save((err, laboratorio) => {
                 if (err) {
                     res.status(500).send({
@@ -92,41 +133,43 @@ function addLaboratorios(req, res) {
  * @param {*} req The request information
  * @param {*} res The response information 
  */
-function getVacunas(req, res){
+function getVacunas(req, res) {
 
-    if(req.params.laboratorio){
-        Vacunas.find({'laboratorio' : req.params.laboratorio}).sort('descripcion').exec((err, vacunas) => {
+    if (req.params.laboratorio) {
+        Vacunas.find({
+            'laboratorio': req.params.laboratorio
+        }).sort('descripcion').exec((err, vacunas) => {
             if (err) {
                 res.status(500).send({
                     message: 'Error en servidor'
                 });
             }
-    
+
             if (!vacunas) {
                 res.status(404).send({
                     message: 'No hay vacunas'
                 });
             }
-    
+
             res.status(200).send({
                 vacunas
             });
         });
 
-    }else{
+    } else {
         Vacunas.find({}).sort('descripcion').exec((err, vacunas) => {
             if (err) {
                 res.status(500).send({
                     message: 'Error en servidor'
                 });
             }
-    
+
             if (!vacunas) {
                 res.status(404).send({
                     message: 'No hay vacunas'
                 });
             }
-    
+
             res.status(200).send({
                 vacunas
             });
@@ -139,20 +182,21 @@ function getVacunas(req, res){
  * @param {*} req The request information
  * @param {*} res The response information 
  */
-function addVacunas(req, res){
+function addVacunas(req, res) {
 
     const SchemaValidate = {
         descripcion: Joi.string().min(3).required().label('Descripcion es obligatoria'),
         laboratorio: Joi.string().required().label('ID de laboratorio es obligatoria'),
-        precio : Joi.number().integer().min(0).required().label('Precio es obligatorio o mayor a 0')
+        precio: Joi.number().integer().min(0).required().label('Precio es obligatorio o mayor a 0')
     }
-    
+
     Joi.validate(req.body, SchemaValidate, (err, data) => {
         if (err) {
             res.status(500).send({
-                error: err.details[0].context.label});
+                error: err.details[0].context.label
+            });
         } else {
-            const vacunas = new Vacunas(req.body);           
+            const vacunas = new Vacunas(req.body);
             vacunas.save((err, vacuna) => {
                 if (err) {
                     res.status(500).send({
