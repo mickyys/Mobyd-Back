@@ -4,7 +4,10 @@ var mongoose = require('mongoose');
 var app = require('./app');
 var port = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://localhost:27017/mobyd', { useNewUrlParser: true },(err,res)=>{
+//var path = "mongodb://localhost:27017/mobyd";
+var path = "mongodb://MongoBD:Hampmobyd1@ds137581.mlab.com:37581/mobyd";
+
+mongoose.connect(path, { useNewUrlParser: true },(err,res)=>{
     if(err){
         throw err;
     }
