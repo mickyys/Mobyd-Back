@@ -10,5 +10,7 @@ api.get('/laboratorios/:vacuna?', comunes.getLaboratorios);
 api.post('/laboratorios', comunes.addLaboratorios);
 api.get('/vacunas/:laboratorio?', comunes.getVacunas);
 api.post('/vacunas', comunes.addVacunas);
+api.get('/mucosas', comunes.getMucosas)
+api.post('/mucosas', comunes.addMucosas)
 
 module.exports = api;

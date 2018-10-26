@@ -13,10 +13,14 @@ function saveTratamiento(req, res){
     const SchemaValidate = {
         fecha : Joi.date().required().label('Fecha es obligatoria'),
         hora : Joi.required().label('Hora es obligatoria'),
-        vacuna : Joi.required().label('Vacuna es obligatoria'),
-        comentario : Joi.required().label('Comentario es obligatoria'),
         precio : Joi.required().label('Precio es obligatoria'),
-        paciente : Joi.optional()
+        vacuna : Joi.optional(),
+        servicio : Joi.optional(),
+        desparasitante : Joi.optional(),
+        ectoparasitos : Joi.optional(),
+        comentario : Joi.required().label('Comentario es obligatoria'),        
+        paciente : Joi.optional(),       
+        tipo : Joi.required().label('Tipo es obligatoria')
     }
 
     Joi.validate(req.body, SchemaValidate, (err, data) => {

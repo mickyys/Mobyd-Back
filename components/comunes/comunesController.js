@@ -4,6 +4,7 @@ const Comuna = require('./comuna');
 const Laboratorio = require('./laboratorios');
 const Vacunas = require('./vacunas');
 const Joi = require('joi');
+const Mucosas = require('./mucosas');
 
 /**
  * Retorna información de todas las comunas de chile
@@ -212,10 +213,50 @@ function addVacunas(req, res) {
     });
 }
 
+function getMucosas(req, res){
+    Mucosas.find({}).sort('descripcion').exec((err, mucosas) => {
+        if (err) {
+            res.status(500).send({
+                message: 'Error en servidor'
+            });
+        }
+
+        if (!mucosas) {
+            res.status(404).send({
+                message: 'No hay mucosas'
+            });
+        }
+
+        res.status(200).send({
+            mucosas
+        });
+    });
+}
+
+
+async function addMucosas(req, res) {
+
+    const mucosas = new Mucosas(req.body);   
+    try{
+        const result = await mucosas.save(); 
+        res.status(200).send({
+            mucosa : result
+        });
+
+    }catch(ex){
+        res.status(500).send({
+            message: 'Error al guardar la mucosas',
+            err : ex.message
+        });
+    }    
+}
+
 module.exports = {
     getComunas,
     getLaboratorios,
     addLaboratorios,
     getVacunas,
-    addVacunas
+    addVacunas,
+    getMucosas,
+    addMucosas
 }

@@ -11,6 +11,7 @@ const comunes = require('./components/comunes/comunesService');
 const tratamiento = require('./components/tratamientos/tratamientosService');
 const agenda = require('./components/agenda/agendaService');
 const desparasitante = require('./components/desparasitante/desparasitanteService');
+const informeMedico = require('./components/informeMedico/informeMedicoService');
 
 var app = express();
 app.use(express.urlencoded({ extended : true }));
@@ -27,5 +28,6 @@ app.use('/comun', comunes);
 app.use('/tratamiento', tratamiento);
 app.use('/agenda', agenda);
 app.use('/desparasitante', desparasitante);
+app.use('/informeMedico', informeMedico);
 
 module.exports = app;
