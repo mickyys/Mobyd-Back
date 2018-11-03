@@ -1,0 +1,6 @@
+{
+    "nameApp" : "API Express Veter Desarrollo",
+    "jwtPrivatekey" : "mobydJwtPrivateKey",
+    "bd" : "mongodb://localhost:27017/mobyd",
+    "pathFile" : "./public/"
+}

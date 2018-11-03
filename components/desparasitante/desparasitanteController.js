@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const Joi = require('joi');
 const Desparasitante = require('./desparasitante');
 const Servicio = require('./servicio');

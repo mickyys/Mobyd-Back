@@ -1,4 +1,4 @@
-'user strict'
+'use strict';
 
 var express = require('express');
 var agenda = require('./agendaController');

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 function pacienteError(error){
     console.log(error);

@@ -1,4 +1,4 @@
-'user strict'
+'use strict';
 
 var express = require('express');
 var comunes = require('./comunesController');

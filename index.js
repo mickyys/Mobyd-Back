@@ -1,18 +1,30 @@
-'use strict'
+'use strict';
 
-var mongoose = require('mongoose');
-var app = require('./app');
-var port = process.env.PORT || 3000;
+const mongoose = require('mongoose');
+const app = require('./app');
+const config = require('config');
+const port = process.env.PORT || 3000;
+const nameApp = config.get('nameApp');
 
-//var path = "mongodb://localhost:27017/mobyd";
-var path = "mongodb://MongoBD:Hampmobyd1@ds137581.mlab.com:37581/mobyd";
 
-mongoose.connect("mongodb://mobyd:a123456@ds137581.mlab.com:37581/mobyd", { useNewUrlParser: true },(err,res)=>{
+if(!config.get('jwtPrivatekey'))
+{
+    console.error("Fatal error : jwtPrivatekey no definida");
+    process.exit(1);
+}
+
+var path = "";
+//var path = "mongodb://MongoBD:Hampmobyd1@ds137581.mlab.com:37581/mobyd";
+
+
+mongoose.connect(config.get('bd'), { 
+    'useNewUrlParser': true
+},(err,res)=>{
     if(err){
         throw err;
     }
     app.listen(port, () =>{
-        console.log('iniciado en puerto : ' + port);
+        console.log(`Aplicacion ${nameApp} - iniciado en puerto : ${port}` );
     });
 });
 

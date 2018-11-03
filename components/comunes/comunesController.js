@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Comuna = require('./comuna');
 const Laboratorio = require('./laboratorios');

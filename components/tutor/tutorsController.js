@@ -1,16 +1,7 @@
-'use strict'
+'use strict';
 
-var Tutor = require('./tutor');
-var Enum = require('enum');
-/**
- * Es un lista de valor para estados
- * Activo 1
- * No activo 0
- */
-var status = new Enum({
-    'active': 1,
-    'noActive': 0
-});
+const Tutor = require('./tutor');
+const Status = require('../enums/status.enums')
 
 /**
  * Retorna informacion del tutor por rut
@@ -115,7 +106,7 @@ function saveTutor(req, res) {
         vip: params.vip,
         userCreate: params.user,
         userModify: params.user,
-        status: status.getValue('active')
+        status: Status.active
     });
 
     console.log(tutor);
@@ -191,7 +182,7 @@ function delTutor(req, res) {
         _id: id
     }, {
         $set: {
-            status: status.getValue('noActive'),
+            status: Status.noactive,
             userModify: user,
             dateModify: Date.now()
         }

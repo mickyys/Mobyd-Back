@@ -1,12 +1,13 @@
-'user strict'
+'use strict';
 
 var express = require('express');
-var informe = require('./informeMedicoController');
+var {getInformeMedico, delInformeMedico , updInformeMedico, addInformeMedico} = require('./informeMedicoController');
+const asyncMiddleware = require("../middleware/async");
 var api = express.Router();
 
-api.put('/', informe.updInformeMedico);
-api.post('/', informe.addInformeMedico);
-api.get('/:id?', informe.getInformeMedico);
-api.delete('/:id', informe.delInformeMedico);
+api.put('/', asyncMiddleware(updInformeMedico));
+api.post('/', asyncMiddleware(addInformeMedico));
+api.get('/:id?', asyncMiddleware(getInformeMedico));
+api.delete('/:id', asyncMiddleware(delInformeMedico));
 
 module.exports = api;

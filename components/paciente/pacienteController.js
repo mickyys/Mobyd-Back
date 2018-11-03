@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var Enum = require('enum');
 var Patient = require('./paciente');

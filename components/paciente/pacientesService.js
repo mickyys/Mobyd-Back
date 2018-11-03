@@ -1,8 +1,9 @@
-'user strict'
+'use strict';
 
-var express = require('express');
-var paciente = require('./pacienteController');
-var api = express.Router();
+const express = require('express');
+const paciente = require('./pacienteController');
+const auth = require('../middleware/auth');
+const api = express.Router();
 
 api.get('/:id?', paciente.getPaciente);
 api.get('/search/:search', paciente.getSearchPaciente);
