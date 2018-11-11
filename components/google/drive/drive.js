@@ -54,11 +54,8 @@ class Drive {
         let fileName = Date.now() + '.' + ext;
         let dest = fs.createWriteStream('./tmp/' + fileName );
 
-        console.log(1);
         const files = await this.drive.files.get({fileId: id, alt: 'media'}, {responseType: 'stream'});        
-        console.log(2);
-        const pipe = await files.data.on('end', () => { console.log('2.1'); }).pipe(dest);
-        console.log(3);
+        const pipe = await files.data.on('end', () => {}).pipe(dest);
         return pipe.path;
         
     }

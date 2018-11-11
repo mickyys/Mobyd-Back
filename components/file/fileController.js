@@ -6,20 +6,12 @@ const fs = require('fs');
 const { Drive } = require('../google/drive/drive');
 const { google } = require('googleapis');
 const mimeType = require('mime-types');
-const tokenFile = require('./token.json');
+const tokenFile  = require('./token.json');
 const credentialsFile = require('./credentials.json');
 
-// If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/drive',
-    'https://www.googleapis.com/auth/drive.appdata',
-    'https://www.googleapis.com/auth/drive.file',
-    'https://www.googleapis.com/auth/drive.metadata',
-    'https://www.googleapis.com/auth/drive.metadata.readonly',
-    'https://www.googleapis.com/auth/drive.photos.readonly',
-    'https://www.googleapis.com/auth/drive.readonly'
-];
-
 function authorizate(){
+    
+
     const {
         client_secret,
         client_id,
@@ -30,10 +22,12 @@ function authorizate(){
         client_id, client_secret, redirect_uris[0]);
 
     oAuth2Client.setCredentials(tokenFile);      
-    
-    this.drive = google.drive({
-        version: 'v3',
-        auth : oAuth2Client
+   
+    return new Promise((resolve, reject) =>{
+        resolve(google.drive({
+            version: 'v3',
+            auth : oAuth2Client
+        }))
     });
 }
 
@@ -60,32 +54,59 @@ async function downloadFile(req, res) {
 
     //  res.download(path, file.name);
 
-    const drive = new Drive();
-    console.log(0);
-    const file = await drive.downloadFile(req.params.id, 'image/jpeg');
-    console.log(4);
-    setTimeout(() => {
-        if (req.query.format === 'base64') {
-            let body = fs.readFileSync(file);
-            const fileBase64 = body.toString('base64');
-            res.send(fileBase64);            
-            setTimeout(()=>{
-                fs.unlinkSync(file);
-            },3000);
-        } else {
-            res.download(file);
-            setTimeout(()=>{
-                fs.unlinkSync(file);
-            },3000);            
-        }
-    }, 1000);
+    const drive = await authorizate();
+    let ext = mimeType.extension('image/jpeg');
+    let fileName = config.get("pathFile")  + Date.now() + '.' + ext;
+    let dest = fs.createWriteStream(fileName);
+
+    drive.files.get({fileId: req.params.id, alt: 'media'}, 
+    {responseType: 'stream'},(err, re) => {
+        re.data.on('end', () => {
+
+            if (req.query.format === 'base64') {
+                let body = fs.readFileSync(fileName);
+                const fileBase64 = body.toString('base64');
+                res.send(fileBase64);            
+                setTimeout(()=>{
+                    fs.unlinkSync(fileName);
+                },3000);
+            } else {
+                res.download(fileName);
+                setTimeout(()=>{
+                    fs.unlinkSync(fileName);
+                },3000);            
+            }        
+        })
+        .on('error', err => {
+            console.log('Error', err);
+         })
+        .pipe(dest);    
+    });         
+    
+
+    // const file = await drive.downloadFile(req.params.id, 'image/jpeg');
+    // console.log(4);
+    // setTimeout(() => {
+    //     if (req.query.format === 'base64') {
+    //         let body = fs.readFileSync(file);
+    //         const fileBase64 = body.toString('base64');
+    //         res.send(fileBase64);            
+    //         setTimeout(()=>{
+    //             fs.unlinkSync(file);
+    //         },3000);
+    //     } else {
+    //         res.download(file);
+    //         setTimeout(()=>{
+    //             fs.unlinkSync(file);
+    //         },3000);            
+    //     }
+    // }, 1000);
 
 }
 
 async function getFiles(req, res) {
-    this.authorizate();
-    const listFiles = this.drive.files.list();
-    
+    const drive = await authorizate();
+    const listFiles = await drive.files.list();    
     res.send(listFiles.data.files);
 }
 
