@@ -2,5 +2,5 @@
     "nameApp" : "API Express Veter Producción",
     "jwtPrivatekey" : "mobydJwtPrivateKey",
     "bd" : "mongodb://mobyd:Hampmobyd1@ds137581.mlab.com:37581/mobyd",
-    "pathFile" : "./public/"
+    "pathFile" : "./tmp/"
 }
