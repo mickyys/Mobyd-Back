@@ -28,9 +28,11 @@ async function downloadFile(req , res){
     res.download(path, file.name);
 }
 
-async function getFiles(){
+async function getFiles(req, res){
     const drive = new Drive();
-    drive.listFiles();
+    const files = await drive.listFiles();
+
+    res.send(files);
 }
 
 module.exports.addFile = addFile;
