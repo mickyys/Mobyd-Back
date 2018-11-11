@@ -1,6 +1,6 @@
 'use strict';
 
-const Joi = require('Joi');
+const Joi = require('joi');
 const Mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('config');
