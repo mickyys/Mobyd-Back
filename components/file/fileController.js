@@ -36,9 +36,15 @@ async function downloadFile(req, res) {
         if (req.query.format === 'base64') {
             let body = fs.readFileSync(file);
             const fileBase64 = body.toString('base64');
-            res.send(fileBase64);
+            res.send(fileBase64);            
+            setTimeout(()=>{
+                fs.unlinkSync(file);
+            },3000);
         } else {
             res.download(file);
+            setTimeout(()=>{
+                fs.unlinkSync(file);
+            },3000);            
         }
     }, 1000);
 
