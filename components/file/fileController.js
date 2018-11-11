@@ -3,6 +3,7 @@
 const { File } = require('./file');
 const config = require('config');
 const fs = require('fs');
+const { Drive } = require('../google/drive/drive')
 
 async function addFile (newFile){
     let file = new File(newFile);    
@@ -27,5 +28,11 @@ async function downloadFile(req , res){
     res.download(path, file.name);
 }
 
+async function getFiles(){
+    const drive = new Drive();
+    drive.listFiles();
+}
+
 module.exports.addFile = addFile;
 module.exports.downloadFile = downloadFile;
+module.exports.getFiles = getFiles;
