@@ -1,6 +1,6 @@
 'use strict';
 
-var Joi = require('Joi');
+var Joi = require('joi');
 const {User} = require('../user/user')
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
