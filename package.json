@@ -4,7 +4,7 @@
   "description": "Programa veterinario",
   "main": "app.js",
   "scripts": {
-    "start": "set NODE_ENV='produccion' && node index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specidifed \" && exit 1"
   },
   "engines": {
