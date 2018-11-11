@@ -4,6 +4,38 @@ const { File } = require('./file');
 const config = require('config');
 const fs = require('fs');
 const { Drive } = require('../google/drive/drive');
+const { google } = require('googleapis');
+const mimeType = require('mime-types');
+const tokenFile = require('./token.json');
+const credentialsFile = require('./credentials.json');
+
+// If modifying these scopes, delete token.json.
+const SCOPES = ['https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/drive.appdata',
+    'https://www.googleapis.com/auth/drive.file',
+    'https://www.googleapis.com/auth/drive.metadata',
+    'https://www.googleapis.com/auth/drive.metadata.readonly',
+    'https://www.googleapis.com/auth/drive.photos.readonly',
+    'https://www.googleapis.com/auth/drive.readonly'
+];
+
+function authorizate(){
+    const {
+        client_secret,
+        client_id,
+        redirect_uris
+    } = credentialsFile.installed;
+
+    let oAuth2Client =  new google.auth.OAuth2(
+        client_id, client_secret, redirect_uris[0]);
+
+    oAuth2Client.setCredentials(tokenFile);      
+    
+    this.drive = google.drive({
+        version: 'v3',
+        auth : oAuth2Client
+    });
+}
 
 async function addFile(newFile) {
     let file = new File(newFile);
@@ -51,10 +83,10 @@ async function downloadFile(req, res) {
 }
 
 async function getFiles(req, res) {
-    const drive = new Drive();
-    const files = await drive.listFiles();
-
-    res.send(files);
+    this.authorizate();
+    const listFiles = this.drive.files.list();
+    
+    res.send(listFiles.data.files);
 }
 
 
