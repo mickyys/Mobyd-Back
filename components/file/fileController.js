@@ -3,15 +3,13 @@
 const { File } = require('./file');
 const config = require('config');
 const fs = require('fs');
-const { Drive } = require('../google/drive/drive');
 const { google } = require('googleapis');
 const mimeType = require('mime-types');
 const tokenFile  = require('./token.json');
+const Status = require('../enums/status.enums')
 const credentialsFile = require('./credentials.json');
 
 function authorizate(){
-    
-
     const {
         client_secret,
         client_id,
@@ -33,30 +31,58 @@ function authorizate(){
 
 async function addFile(newFile) {
     let file = new File(newFile);
-    file = await file.save();
+        
+    let fileName = file._id + "." + file.extension;    
+    let fileNamePath = config.get("pathFile") + fileName;
 
-    fs.writeFile(
-        config.get("pathFile") + file._id + "." + file.extension,
+    await fs.writeFile(
+        fileNamePath,       
         newFile.fileBase64, {
             encoding: 'base64'
         },
         (err) => {
             if (err) throw err;
             console.log('archivo almacenado correctamente');
-        });
+    });
+
+    const drive = await authorizate();
+    const fileMetadata = {
+        'name': fileName
+    };
+    
+    const media = {
+        mimeType: mimeType.lookup(file.extension),
+        body: fs.createReadStream(fileNamePath)
+    };
+     
+    const googleFile = await drive.files.create({
+        resource: fileMetadata,
+        media: media,
+        fields: 'id'
+    });
+
+    const permissions = {
+        role: 'reader',
+        type: 'anyone'
+    }
+
+    const permise = await drive.permissions.create({
+        fileId: googleFile.data.id,
+        resource : permissions,
+        fields: 'id'
+    });
+
+    file.googleId = googleFile.data.id;  
+    file = await file.save();      
 
     return file;
 }
 
 async function downloadFile(req, res) {
-    //const file = await File.findById(req.params.id);
-    //   const path = config.get("pathFile") + file._id + "." + file.extension;
+    const file = await File.findById(req.params.id);
+    const drive = await authorizate();    
 
-    //  res.download(path, file.name);
-
-    const drive = await authorizate();
-    let ext = mimeType.extension('image/jpeg');
-    let fileName = config.get("pathFile")  + Date.now() + '.' + ext;
+    let fileName = config.get("pathFile") + file.name + '.' + file.extension;
     let dest = fs.createWriteStream(fileName);
 
     drive.files.get({fileId: req.params.id, alt: 'media'}, 
@@ -83,34 +109,23 @@ async function downloadFile(req, res) {
         .pipe(dest);    
     });         
     
-
-    // const file = await drive.downloadFile(req.params.id, 'image/jpeg');
-    // console.log(4);
-    // setTimeout(() => {
-    //     if (req.query.format === 'base64') {
-    //         let body = fs.readFileSync(file);
-    //         const fileBase64 = body.toString('base64');
-    //         res.send(fileBase64);            
-    //         setTimeout(()=>{
-    //             fs.unlinkSync(file);
-    //         },3000);
-    //     } else {
-    //         res.download(file);
-    //         setTimeout(()=>{
-    //             fs.unlinkSync(file);
-    //         },3000);            
-    //     }
-    // }, 1000);
-
 }
 
 async function getFiles(req, res) {
-    const drive = await authorizate();
-    const listFiles = await drive.files.list();    
-    res.send(listFiles.data.files);
+    const result = await File.find({
+        'status': Status.active
+    });
+    
+    res.send(result);
+}
+
+async function saveFile(req, res){
+    const file = await addFile(req);
+    res.send(file);
 }
 
 
 module.exports.addFile = addFile;
+module.exports.saveFile = saveFile;
 module.exports.downloadFile = downloadFile;
 module.exports.getFiles = getFiles;

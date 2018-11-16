@@ -20,6 +20,9 @@ module.exports.File = mongoose.model('File', schema(
         status : {
             type : Number,
             default : 1
+        },
+        googleId : {
+            type : String
         }
     }
 ));
