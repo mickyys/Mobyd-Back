@@ -43,8 +43,8 @@ var User =  Mongoose.Schema({
     operations : []
 });
 
-User.methods.generateAuthToken = function(){
-    const token = jwt.sign({ _id : this._id , isAdmin : this.isAdmin}, config.get("jwtPrivatekey"));
+User.methods.generateAuthToken = function(){    
+    const token = jwt.sign({ _id : this._id , isAdmin : this.isAdmin}, config.get("jwtPrivatekey"), { expiresIn : '7h' });    
     return token;
 }
 

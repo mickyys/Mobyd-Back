@@ -1,9 +1,9 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-module.exports.File = mongoose.model('File', schema(
+var file = Schema(
     {
         _id : {
             type : mongoose.Schema.ObjectId,
@@ -25,4 +25,13 @@ module.exports.File = mongoose.model('File', schema(
             type : String
         }
     }
-));
+);
+
+file.set('toObject', { virtuals: true });
+
+file.virtual('googleURL').get(function () {
+    return 'https://drive.google.com/file/d/' + this.googleId + '/preview';
+});
+
+
+module.exports.File = mongoose.model('File', file);
