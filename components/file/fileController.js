@@ -9,6 +9,7 @@ const tokenFile = require('./token.json');
 const Status = require('../enums/status.enums')
 const credentialsFile = require('./credentials.json');
 
+
 function authorizate() {
     const {
         client_secret,
@@ -31,52 +32,54 @@ function authorizate() {
 
 async function addFile(req) {
 
-    try {
-        req.files.uploads.forEach(async (obj, index) => {
-            console.log(" file " + index);
+    let files = [];
+    await Promise.all(req.files.uploads.map(async (obj) => {
 
-            let file = new File({
-                extension: mimeType.extension(obj.type),
-                name: obj.originalFilename
-            });
+        let file = new File({
+            extension: mimeType.extension(obj.type),
+            name: obj.originalFilename
+        });        
+    
+        file.googleId = await uploadGoogleDrive(obj)                       
+        file.save();
+        files.push(file);
+      
+    }));
 
-            const drive = await authorizate();
-            const fileMetadata = {
-                'name': obj.originalFilename
-            };
+    return files;    
+}
 
-            const media = {
-                mimeType: obj.type,
-                body: fs.createReadStream(obj.path) 
-            };
 
-            const googleFile = await drive.files.create({
-                resource: fileMetadata,
-                media: media,
-                fields: 'id'
-            });
+async function uploadGoogleDrive(file) {
 
-            const permissions = {
-                role: 'reader',
-                type: 'anyone'
-            }
+    const drive = await authorizate();
+    const fileMetadata = {
+        'name': file.originalFilename
+    };
 
-            const permise = await drive.permissions.create({
-                fileId: googleFile.data.id,
-                resource: permissions,
-                fields: 'id'
-            });
+    const media = {
+        mimeType: file.type,
+        body: await fs.createReadStream(file.path)
+    };
 
-            file.googleId = googleFile.data.id;
-            file = file.save();
+    const googleFile = await drive.files.create({
+        resource: fileMetadata,
+        media: media,
+        fields: 'id'
+    });
 
-            console.log('archivo almacenado correctamente');
-            return file;
-        });
-    } catch (ex) {
-        console.log("error :");
-        console.error(ex);
+    const permissions = {
+        role: 'reader',
+        type: 'anyone'
     }
+
+    const permise = await drive.permissions.create({
+        fileId: googleFile.data.id,
+        resource: permissions,
+        fields: 'id'
+    });
+
+    return  googleFile.data.id;
 }
 
 async function downloadFile(req, res) {
@@ -124,11 +127,29 @@ async function getFiles(req, res) {
     res.send(result);
 }
 
+async function deleteFile(req, res){
+    
+    const result = await File.findByIdAndUpdate(req.params.id, {
+        $set: { status: Status.noactive }
+    });
+
+    const drive = await authorizate();    
+    
+    //No se necesita esperar respuesta.
+    const googleFile =  drive.files.delete({
+        'fileId': result.googleId
+    });
+
+    res.status(200).send({
+        result: result
+    });
+}
+
 async function saveFile(req, res) {
 
     const file = await addFile(req);
-
-    res.send(file);
+    
+    res.send({ file });
 }
 
 
@@ -136,3 +157,4 @@ module.exports.addFile = addFile;
 module.exports.saveFile = saveFile;
 module.exports.downloadFile = downloadFile;
 module.exports.getFiles = getFiles;
+module.exports.deleteFile = deleteFile;

@@ -30,7 +30,7 @@ var file = Schema(
 file.set('toObject', { virtuals: true });
 
 file.virtual('googleURL').get(function () {
-    return 'https://drive.google.com/file/d/' + this.googleId + '/preview';
+    return 'https://drive.google.com/file/d/' + this.googleId + '/view';
 });
 
 

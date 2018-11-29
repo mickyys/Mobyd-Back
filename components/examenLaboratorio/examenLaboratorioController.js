@@ -5,11 +5,8 @@ const Status = require('../enums/status.enums')
 const { addFile } = require('../file/fileController')
 
 module.exports.addExamenLaboratorio = async (req, res) => {
-      
-    const file = await addFile(req.body.file);
    
-    let examenLaboratorio = new ExamenLaboratorio(req.body);
-    examenLaboratorio.file = file._id;
+    let examenLaboratorio = new ExamenLaboratorio(req.body);    
 
     const result = await examenLaboratorio.save();
 
@@ -21,21 +18,20 @@ module.exports.addExamenLaboratorio = async (req, res) => {
 module.exports.getExamenLaboratorio = async (req, res) => {
     let result;
 
-    // if (req.params.id) {
-    //     result = await ExamenLaboratorio
-    //         .findById(req.params.id)
-    //         .populate('examens')
-    //         .populate('files')
-    //         .sort('descripcion');
-    // } else {
+    if (req.params.id) {
+        result = await ExamenLaboratorio
+            .findById(req.params.id)
+            .populate('exam')
+            .populate('file');
+    } else {
         result = await ExamenLaboratorio
             .find({
                 'status': Status.active
             })
-            // .populate('exam')
-            .populate('file')
+            .populate('exam')
+            // .populate('file')
             .sort('date');
-    // }
+    }
     
     res.status(200).send({
          result

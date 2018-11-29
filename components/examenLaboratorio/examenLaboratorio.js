@@ -20,10 +20,13 @@ module.exports.ExamenLaboratorio = Mongoose.model('examenLaboratorio', Schema({
         ref: 'examen',
         required : true
     },
-    file : {
+    price : {
+        type : Number,      
+    },
+    file : [{
         type : Mongoose.Schema.Types.ObjectId,
         ref: 'File'
-    },
+    }],
     status : {
         type : Number,
         default : 1
