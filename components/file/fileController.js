@@ -6,7 +6,7 @@ const config = require('config');
 const fs = require('fs');
 const mimeType = require('mime-types');
 const tokenFile = require('./token.json');
-const Status = require('../enums/status.enums')
+const Status = require('../enums/status.enums');
 const credentialsFile = require('./credentials.json');
 
 

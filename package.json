@@ -4,7 +4,7 @@
   "description": "Programa veterinario",
   "main": "app.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specidifed \" && exit 1"
   },
   "engines": {
@@ -38,6 +38,6 @@
     "morgan": "^1.9.1"
   },
   "devDependencies": {
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.8"
   }
 }

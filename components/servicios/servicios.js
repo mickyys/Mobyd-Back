@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
 const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
 
-module.exports.Examen = Mongoose.model('examen', Schema({
+module.exports.Servicio = Mongoose.model('servicio', Schema({
     _id: {
         type: Mongoose.Schema.ObjectId,
         default: Mongoose.Types.ObjectId

@@ -2,14 +2,7 @@
 
 var Enum = require('enum');
 var Patient = require('./paciente');
-
-/**
- * Es un lista de valor para estados
- * Activo 1
- * No activo 0
- */
-var status = new Enum({'active': 1, 'noActive': 0});
-
+const Status = require('../enums/status.enums');
 
 function getSearchPaciente(req, res){
     let search = req.params.search;
@@ -73,7 +66,7 @@ function getPaciente(req, res){
 
         });
     }else{
-        Patient.find({'status' : status.getValue('active')},'name birthDate race.raza sex microchip',(err, patients) =>{
+        Patient.find({'status' : Status.active},'name birthDate race.raza sex microchip',(err, patients) =>{
             if(err){
                 res.status(500).send({message : 'Error en servidor'});
             }
