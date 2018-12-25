@@ -1,46 +1,7 @@
 'use strict';
 
-var Enum = require('enum');
-var Patient = require('./paciente');
+const Patient = require('./paciente');
 const Status = require('../enums/status.enums');
-
-function getSearchPaciente(req, res){
-    let search = req.params.search;
-    console.log(search);
-
-    Patient.find()
-      .and([
-          { $or: [{'microchip': { $eq: search }  }] }         
-          // { $or: [{'name': {'$regex': search}} , {'microchip': {'$regex': search} }] }    
-      ])
-      .exec(function (err, patients) {
-        if(err){
-            res.status(500).send({message : 'Error en servidor'});
-        }
-
-        if(!patients){
-            res.status(404).send({message : 'No hay paciente'});
-        }
-
-        res.status(200).send({patients});
-      });
-
-    /* Patient.find({'status' : status.getValue('active') 
-                , 'name' : {'$regex': search} 
-                , 'microchip' : {'$regex': search} 
-                }
-    ,(err, patients) =>{
-        if(err){
-            res.status(500).send({message : 'Error en servidor'});
-        }
-
-        if(!patients){
-            res.status(404).send({message : 'No hay paciente'});
-        }
-
-        res.status(200).send({patients});
-    }); */
-}
 
 /**
  * Retorna información del paciente si contiene el ID, en caso de no traer retorna todos los pacientes activos
@@ -48,36 +9,21 @@ function getSearchPaciente(req, res){
  * @param res The response retorna estado y pacientes en formato rest
  */
 
-function getPaciente(req, res){
+async function getPaciente(req, res){
 
-    var id = req.params.id;
+    const id = req.params.id;
+    let result;
 
     if(id){
-        Patient.findById(id, (err,patient) => {
-            if(err){
-                res.status(500).send({message : 'Error en servidor al obtener paciente'});
-            }
-
-            if(!patient){
-                res.status(404).send({message : 'No existe paciente'});
-            }
-    
-            res.status(200).send({patient});
-
-        });
+        result = await Patient.findById(id);
     }else{
-        Patient.find({'status' : Status.active},'name birthDate race.raza sex microchip',(err, patients) =>{
-            if(err){
-                res.status(500).send({message : 'Error en servidor'});
-            }
-    
-            if(!patients){
-                res.status(404).send({message : 'No hay paciente'});
-            }
-    
-            res.status(200).send({patients});
-        });
+        result = await Patient.find({'status' : Status.active},'name birthDate race.raza sex microchip');
     }
+
+    res.status(200).send({
+        result
+    });
+
 }
 
 /**
@@ -85,36 +31,13 @@ function getPaciente(req, res){
  * @param req The request contiene la información del paciente
  * @param res The response retorna información del paciente con un ID unico
  */
-function savePaciente(req, res){    
-    var params = req.body;
+async function savePaciente(req, res){    
     
-    var patient = new Patient({
-        name : params.name,
-        species : params.species,
-        speciesType : params.speciesType,     
-        birthDate : params.birthDate,
-        race : params.race,
-    //    raceType : params.raceType,
-        sex : params.sex,
-        microchip : params.microchip,
-        photo : params.photo,
-        tutor : params.tutor,
-        status : status.getValue('active'),
-        observations : params.observations,
-        death : status.getValue('noActive'),
-        userCreate : params.user,
-        userModify : params.user
-    });
+    const patient = new Patient(req.body);
+    const result = await patient.save();
 
-    console.log("patientStore");
-    console.log(patient);
-    patient.save((err, patientStore)=>{
-        if(err){
-            res.status(500).send({ message : 'Error al guardar el paciente' });
-        }
-        else{
-            res.status(200).send({ patient : patientStore });
-        }
+    res.status(200).send({
+        patient : result
     });
 }
 
@@ -123,35 +46,14 @@ function savePaciente(req, res){
  * @param req The request contiene la información del paciente
  * @param res The response retorna estado e información modificada.
  */
-function updPaciente(req, res){
+async function updPaciente(req, res){
+    
+    const result = await Patient.findByIdAndUpdate({_id : req.body._id}, {
+        $set : req.body
+    });
 
-    var params = req.body;
-    var id = params._id; 
-
-    Patient.findByIdAndUpdate(id, {$set: {
-        name : params.name,
-        species : params.species,
-        speciesType : params.speciesType,     
-        birthDate : params.birthDate,
-        race : params.race,
-        raceType : params.raceType,
-        sex : params.sex,
-        microchip : params.microchip,
-        photo : params.photo,
-        tutor : params.tutor,
-        status : params.status,
-        observations : params.observations,
-        death : params.death,
-        userModify : params.user,
-        dateModify : Date.now()
-    }}
-    , (err, patientUpdate) =>{
-        if(err){
-            res.status(500).send({ message : 'Error al guardar el paciente' });
-        }
-        else{
-            res.status(200).send({ patient : patientUpdate });
-        }
+    res.status(200).send({
+        result
     });
 }
 
@@ -160,27 +62,21 @@ function updPaciente(req, res){
  * @param req The request contiene id y usuario
  * @param res The response retorna estado y mensaje de confirmación
  */
-function delPaciente(req, res){
-    var id = req.params.id;
-    var user = req.params.user;
+async function delPaciente(req, res){
+    
+    const result = await Patient.findOneAndUpdate({ _id : req.params.id},{
+                    $set : { 
+                        status : Status.noactive 
+                    }
+    });
 
-    Patient.findOneAndUpdate({_id : id}, {
-                             $set : { status : status.getValue('noActive'),
-                                      userModify : user,
-                                      dateModify : Date.now()
-                             }}, (err, patientUpdate) =>{
-        if(err){
-            res.status(500).send({ message : 'Error al eliminar el paciente', err });
-        }
-        else{
-            res.status(200).send({ message : 'Paciente eliminado correctamente' });
-        }
+    res.status(200).send({
+        result
     });
 }
 
 module.exports = {
     getPaciente,
-    getSearchPaciente,
     savePaciente,
     updPaciente,
     delPaciente

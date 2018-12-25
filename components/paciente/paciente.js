@@ -14,13 +14,16 @@ var patientSchema = Schema({
     microchip : Number,
     photo : String,
     tutor : { type: Mongoose.Schema.Types.ObjectId, ref: 'tutors' },
-    status : Number,
     observations : String,
     death : Number,
     userCreate : String,
     userModify : String,
     dateCreate : {type: Date, default: Date.now},
-    dateModify : {type: Date, default: Date.now}  
+    dateModify : {type: Date, default: Date.now},
+    status : {
+      type : Number,
+      default : 1
+    }  
 });
 
 module.exports = Mongoose.model('patient', patientSchema);

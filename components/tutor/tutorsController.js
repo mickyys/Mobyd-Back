@@ -8,26 +8,15 @@ const Status = require('../enums/status.enums')
  * @param req The request contiene rut del tutor
  * @param res The response retorna información del tutor
  */
-function getTutorRut(req, res){
-    var rut = req.params.rut;
+async function getTutorRut(req, res) {
+    const rut = req.params.rut;
 
-    Tutor.findOne({'rutDV' : rut}, (err, tutor) =>{
-        if (err) {
-            res.status(500).send({
-                message: 'Error en servidor al obtener el tutor'
-               ,err
-            });
-        }
-        
-        if (tutor === null ) {
-            res.status(404).send({
-                message: 'No existe tutor'
-            });
-        }else{
-            res.status(200).send({
-                tutor
-            });
-        }       
+    result = await Tutor.findOne({
+        'rutDV': rut
+    });
+
+    res.status(200).send({
+        tutor: result
     });
 }
 
@@ -37,50 +26,25 @@ function getTutorRut(req, res){
  * @param req The request contiene el ID enviado en la URL
  * @param res The response retorna estado y pacientes en formato rest
  */
-function getTutor(req, res) {
-    var id = req.params.id;
+async function getTutor(req, res) {
+    const id = req.params.id;
+    let result;
 
     if (id) {
-        Tutor.findById(id, (err, tutor) => {
-            if (err) {
-                res.status(500).send({
-                    message: 'Error en servidor al obtener el tutor'
-                });
-            }
-
-            if (!tutor) {
-                res.status(404).send({
-                    message: 'No existe tutor'
-                });
-            }else{
-                res.status(200).send({
-                    tutor
-                });
-            }
+        result = await Tutor.findById(id);
+        res.status(200).send({
+            tutor: result
         });
     } else {
-        Tutor.find({
-            'status': status.getValue('active')
-        }, (err, tutors) => {
-            if (err) {
-                res.status(500).send({
-                    message: 'Error en servidor'
-                });
-            }
 
-            if (!tutors) {
-                res.status(404).send({
-                    message: 'No hay tutores'
-                });
-            }
-            else{
-                res.status(200).send({
-                    tutors
-                });
-            }            
+        result = await Tutor.find({
+            'status': Status.active
+        });
+
+        res.status(200).send({
+            tutors: result
         });
     }
-
 }
 
 /**
@@ -88,40 +52,13 @@ function getTutor(req, res) {
  * @param req The request contiene la información del tutor
  * @param res The response retorna información del tutor con un ID unico
  */
-function saveTutor(req, res) {
-    var params = req.body;
+async function saveTutor(req, res) {
 
-    var tutor = new Tutor({ 
-        rutDV: params.rutDV,
-        name: params.name,
-        lastName: params.lastName,
-        birthDate : params.birthDate,
-        address: params.address,
-        phone: params.phone,
-        location: params.location,
-        commune: params.commune,
-        communeId: params.communeId,
-        email: params.email,
-        photo: params.photo,
-        vip: params.vip,
-        userCreate: params.user,
-        userModify: params.user,
-        status: Status.active
-    });
+    const tutor = new Tutor(req.body);
+    let result = await tutor.save();
 
-    console.log(tutor);
-
-    tutor.save((err, tutorStore) => {
-        if (err) {
-            res.status(500).send({
-                message: 'Error al guardar el tutor',
-                err
-            });
-        } else {
-            res.status(200).send({
-                tutor: tutorStore
-            });
-        }
+    res.status(200).send({
+        result
     });
 }
 
@@ -131,41 +68,16 @@ function saveTutor(req, res) {
  * @param req The request contiene la información del tutor
  * @param res The response retorna estado e información modificada.
  */
-function updTutor(req, res) {
-    var params = req.body;
-    var id = params._id;
-    
-    Tutor.findByIdAndUpdate({
-        _id: id
-    }, {
-        $set: {
-            rutDv: params.rutDv,
-            name: params.name,
-            lastName: params.lastName,
-            birthDate : params.birthDate,
-            address: params.address,
-            phone: params.phone,
-            localtion: params.localtion,
-            commune: params.commune,
-            communeId: params.communeId,
-            email: params.email,
-            photo: params.photo,
-            vip: params.vip,
-            userModify: params.user,
-            dateModify: Date.now()
+async function updTutor(req, res) {
 
-        }
-    }, (err, tutorStore) => {
-        if (err) {
-            res.status(500).send({
-                message: 'Error al modificar el tutor',
-                err
-            });
-        } else {
-            res.status(200).send({
-                tutor: tutorStore
-            });
-        }
+    let result = await Tutor.findByIdAndUpdate({
+        _id: req.body._id
+    }, {
+        $set: req.body
+    });
+
+    res.status(200).send({
+        result
     });
 }
 
@@ -174,11 +86,11 @@ function updTutor(req, res) {
  * @param req The request contiene id y usuario
  * @param res The response retorna estado y mensaje de confirmación
  */
-function delTutor(req, res) {
-    var id = req.params.id;
-    var user = req.params.user;
+async function delTutor(req, res) {
+    const id = req.params.id;
+    const user = req.params.user;
 
-    Tutor.findOneAndUpdate({
+    let result = await Tutor.findOneAndUpdate({
         _id: id
     }, {
         $set: {
@@ -186,18 +98,12 @@ function delTutor(req, res) {
             userModify: user,
             dateModify: Date.now()
         }
-    }, (err, tutorStore) => {
-        if (err) {
-            res.status(500).send({
-                message: 'Error al eliminar el tutor',
-                err
-            });
-        } else {
-            res.status(200).send({
-                message: 'Tutor eliminado correctamente'
-            });
-        }
     });
+
+    res.status(200).send({
+        message: 'Tutor eliminado correctamente'
+    });
+
 }
 
 module.exports = {
