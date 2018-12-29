@@ -1,13 +1,12 @@
 'use strict';
 
-var Mongoose = require('mongoose');
-var Schema = Mongoose.Schema;
+const Mongoose = require('mongoose');
+const Schema = Mongoose.Schema;
 
-var ServicioSchema = Schema({
-    _id : {type: Mongoose.Schema.ObjectId, default: Mongoose.Types.ObjectId},
+const ServicioSchema = Schema({    
     tamano : String,
     factor : Number,
-    status : {type : Number, default : 1}     
+    status : { type : Number, default : 1 }     
 });
 
-module.exports = Mongoose.model('servicioDesparasitante', ServicioSchema);
+module.exports = Mongoose.model('Servicesdesparasitante', ServicioSchema);

@@ -1,10 +1,9 @@
 'use strict';
 
-var Mongoose = require('mongoose');
-var Schema = Mongoose.Schema;
+const Mongoose = require('mongoose');
+const Schema = Mongoose.Schema;
 
-var DesparasitanteSchema = Schema({
-    _id : {type: Mongoose.Schema.ObjectId, default: Mongoose.Types.ObjectId},
+const DesparasitanteSchema = Schema({    
     descripcion : String,
     precio : Number,
     status : {type : Number, default : 1}

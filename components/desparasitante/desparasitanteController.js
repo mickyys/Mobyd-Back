@@ -1,118 +1,47 @@
 'use strict';
-const Joi = require('joi');
 const Desparasitante = require('./desparasitante');
 const Servicio = require('./servicio');
-var Enum = require('enum');
 
-var status = new Enum({
-    'active': 1,
-    'noActive': 0
-});
+async function saveServicio(req, res) {
+    const servicio = new Servicio(req.body);
+    const result = await servicio.save();
 
-function saveServicio(req, res){
-    const SchemaValidate = {
-        tamano : Joi.string().required().label('Tamaño es obligatorio'),
-        factor : Joi.number().required().label('Factor es obligatorio')
-    }
-
-    Joi.validate(req.body, SchemaValidate, (err, data) => {
-        if (err) {
-            res.status(500).send({
-                error: err.details[0].context.label
-            });
-        } else {
-            var servicio = new Servicio(req.body);
-            servicio.save((err, data) => {
-                if (err) {
-                    res.status(500).send({
-                        message: 'Error al guardar servicio'
-                    });
-                } else {
-                    res.status(200).send({
-                        servicio: data
-                    });
-                }
-            });
-        }
-
+    res.status(200).send({
+        servicios: result
     });
 }
 
 
-function getServicio(req, res){    
-    Servicio.find({
-        'status': status.getValue('active')
-    }, (err, servicio) => {
-        if (err) {
-            res.status(500).send({
-                message: 'Error en servidor'
-            });
-        }
-
-        if (!servicio) {
-            res.status(404).send({
-                message: 'No hay servicio'
-            });
-        }
-        else{
-            res.status(200).send({
-                servicios : servicio
-            });
-        }            
+async function getServicio(req, res) {
+    const result = await Servicio.find({
+        'status': Status.active
     });
+    res.status(200).send({
+        servicios: result
+    });
+
 }
 
-function saveDesparasitante(req, res){
-    const SchemaValidate = {
-        descripcion : Joi.string().required().label('descripcion es obligatoria'),
-        precio : Joi.number().required().label('Precio es obligatorio')
-    }
+async function saveDesparasitante(req, res) {
+    const desparasitante = new Desparasitante(req.body);
+    const result = await desparasitante.save();
 
-    Joi.validate(req.body, SchemaValidate, (err, data) => {
-        if (err) {
-            res.status(500).send({
-                error: err.details[0].context.label
-            });
-        } else {
-            var desparasitante = new Desparasitante(req.body);
-            desparasitante.save((err, data) => {
-                if (err) {
-                    res.status(500).send({
-                        message: 'Error al guardar desparasitante'
-                    });
-                } else {
-                    res.status(200).send({
-                        desparasitante: data
-                    });
-                }
-            });
-        }
-
+    res.status(200).send({
+        desparasitante: result
     });
+
 }
 
-function getDesparasitante(req, res){
-    
-    Desparasitante.find({
-        'status': status.getValue('active')
-    }, (err, desparasitante) => {
-        if (err) {
-            res.status(500).send({
-                message: 'Error en servidor'
-            });
-        }
+async function getDesparasitante(req, res) {
 
-        if (!desparasitante) {
-            res.status(404).send({
-                message: 'No hay desparasitante'
-            });
-        }
-        else{
-            res.status(200).send({
-                desparasitantes : desparasitante
-            });
-        }            
+    const result = await Desparasitante.find({
+        'status': Status.active
     });
+
+    res.status(200).send({
+        desparasitantes: result
+    });
+
 }
 
 module.exports = {

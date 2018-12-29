@@ -8,6 +8,10 @@ var informeMedicoSchema = Schema({
         type: Mongoose.Schema.ObjectId, 
         default: Mongoose.Types.ObjectId
     },
+    paciente : {
+        type: String,
+        required : true
+    },
     fecha : { 
         type : Date, 
         required : true 

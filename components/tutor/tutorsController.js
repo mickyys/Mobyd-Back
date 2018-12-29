@@ -11,7 +11,7 @@ const Status = require('../enums/status.enums')
 async function getTutorRut(req, res) {
     const rut = req.params.rut;
 
-    result = await Tutor.findOne({
+    let result = await Tutor.findOne({
         'rutDV': rut
     });
 

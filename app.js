@@ -11,10 +11,8 @@ const pacienteExamenLaboratorio = require('./components/pacienteExamenLaboratori
 const tutor = require('./components/tutor/tutorsService');
 const raza = require('./components/raza/razasService');
 const comunes = require('./components/comunes/comunesService');
-const tratamiento = require('./components/tratamientos/tratamientosService');
 const agenda = require('./components/agenda/agendaService');
 const desparasitante = require('./components/desparasitante/desparasitanteService');
-const informeMedico = require('./components/informeMedico/informeMedicoService');
 const users = require('./components/user/userService');
 const auth = require('./components/auth/authService');
 const error = require("./components/middleware/error")
@@ -42,10 +40,8 @@ app.use('/paciente', paciente);
 app.use('/tutor', tutor);
 app.use('/raza', raza);
 app.use('/comun', comunes);
-app.use('/tratamiento', tratamiento);
 app.use('/agenda', agenda);
 app.use('/desparasitante', desparasitante);
-app.use('/informeMedico', informeMedico);
 app.use('/users', users);
 app.use('/auth', auth);
 app.use('/examenLaboratorio', examenLaboratorio);

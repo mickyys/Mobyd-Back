@@ -4,7 +4,10 @@ var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
 var LaboratorioSchema = Schema({
-    _id : {type: Mongoose.Schema.ObjectId, default: Mongoose.Types.ObjectId},
+    _id : {
+        type: Mongoose.Schema.ObjectId, 
+        default: Mongoose.Types.ObjectId
+    },
     descripcion : String    
 });
 

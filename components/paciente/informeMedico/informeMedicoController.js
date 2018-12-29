@@ -1,7 +1,6 @@
 'use strict';
 
-const InformeMedico = require('./informeMedico')
-const Status = require('../enums/status.enums')
+const InformeMedico = require('./informeMedico');
 
 module.exports.addInformeMedico = async (req, res) => {
     const informeMedico = new InformeMedico(req.body);
@@ -16,13 +15,14 @@ module.exports.getInformeMedico = async (req, res) => {
 
     let result;
 
-    if (req.params.id) {
+    if (req.params.informe) {
         result = await InformeMedico
-            .findById(req.params.id, )
+            .findById({_id : req.params.informe}, )
             .sort('descripcion');
     } else {
         result = await InformeMedico
             .find({
+                'paciente' : req.params.id,
                 'status': Status.active
             })
             .sort('descripcion');
@@ -45,7 +45,7 @@ module.exports.updInformeMedico = async (req, res) => {
 
 module.exports.delInformeMedico = async (req, res) => {
 
-    const result = await InformeMedico.findByIdAndUpdate(req.params.id, {
+    const result = await InformeMedico.findByIdAndUpdate({_id : req.params.informe}, {
         $set: {
             status: Status.noactive
         }

@@ -16,5 +16,5 @@ var VacunasSchema = Schema({
     precio : Number     
 });
 
-module.exports = Mongoose.model('vacunas', VacunasSchema);
+module.exports = Mongoose.model('vacuna', VacunasSchema);
 

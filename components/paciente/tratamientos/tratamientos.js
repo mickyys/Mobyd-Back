@@ -1,9 +1,9 @@
 'use strict';
 
-var Mongoose = require('mongoose');
-var Schema = Mongoose.Schema;
+const Mongoose = require('mongoose');
+const Schema = Mongoose.Schema;
 
-var TratamientoSchema = Schema({
+const TratamientoSchema = Schema({
     _id : {
         type: Mongoose.Schema.ObjectId, 
         default: Mongoose.Types.ObjectId
@@ -12,11 +12,11 @@ var TratamientoSchema = Schema({
     hora : String,
     vacuna : {
         type : Mongoose.Schema.Types.ObjectId,
-        ref : 'vacunas'
+        ref : 'vacuna'
     },
     servicio : {
         type : Mongoose.Schema.Types.ObjectId,
-        ref : 'servicioDesparasitante'
+        ref : 'servicesdesparasitante'
     },
     desparasitante : {
         type : Mongoose.Schema.Types.ObjectId,

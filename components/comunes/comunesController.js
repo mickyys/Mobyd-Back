@@ -134,46 +134,17 @@ function addLaboratorios(req, res) {
  * @param {*} req The request information
  * @param {*} res The response information 
  */
-function getVacunas(req, res) {
-
+async function getVacunas(req, res) {
     if (req.params.laboratorio) {
-        Vacunas.find({
-            'laboratorio': req.params.laboratorio
-        }).sort('descripcion').exec((err, vacunas) => {
-            if (err) {
-                res.status(500).send({
-                    message: 'Error en servidor'
-                });
-            }
-
-            if (!vacunas) {
-                res.status(404).send({
-                    message: 'No hay vacunas'
-                });
-            }
-
-            res.status(200).send({
-                vacunas
-            });
+        let result = await Vacunas.find({'laboratorio': req.params.laboratorio}).sort('descripcion');
+        res.status(200).send({
+            vacunas: result
         });
 
     } else {
-        Vacunas.find({}).sort('descripcion').exec((err, vacunas) => {
-            if (err) {
-                res.status(500).send({
-                    message: 'Error en servidor'
-                });
-            }
-
-            if (!vacunas) {
-                res.status(404).send({
-                    message: 'No hay vacunas'
-                });
-            }
-
-            res.status(200).send({
-                vacunas
-            });
+        let result = await Vacunas.find({}).sort('descripcion');
+        res.status(200).send({
+            vacunas: result
         });
     }
 }
@@ -213,7 +184,7 @@ function addVacunas(req, res) {
     });
 }
 
-function getMucosas(req, res){
+function getMucosas(req, res) {
     Mucosas.find({}).sort('descripcion').exec((err, mucosas) => {
         if (err) {
             res.status(500).send({
@@ -236,19 +207,19 @@ function getMucosas(req, res){
 
 async function addMucosas(req, res) {
 
-    const mucosas = new Mucosas(req.body);   
-    try{
-        const result = await mucosas.save(); 
+    const mucosas = new Mucosas(req.body);
+    try {
+        const result = await mucosas.save();
         res.status(200).send({
-            mucosa : result
+            mucosa: result
         });
 
-    }catch(ex){
+    } catch (ex) {
         res.status(500).send({
             message: 'Error al guardar la mucosas',
-            err : ex.message
+            err: ex.message
         });
-    }    
+    }
 }
 
 module.exports = {
