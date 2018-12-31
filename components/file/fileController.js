@@ -1,7 +1,11 @@
 'use strict';
 
-const { File } = require('./file');
-const { google } = require('googleapis');
+const {
+    File
+} = require('./file');
+const {
+    google
+} = require('googleapis');
 const config = require('config');
 const fs = require('fs');
 const mimeType = require('mime-types');
@@ -38,15 +42,15 @@ async function addFile(req) {
         let file = new File({
             extension: mimeType.extension(obj.type),
             name: obj.originalFilename
-        });        
-    
-        file.googleId = await uploadGoogleDrive(obj)                       
+        });
+
+        file.googleId = await uploadGoogleDrive(obj)
         file.save();
         files.push(file);
-      
+
     }));
 
-    return files;    
+    return files;
 }
 
 
@@ -79,7 +83,7 @@ async function uploadGoogleDrive(file) {
         fields: 'id'
     });
 
-    return  googleFile.data.id;
+    return googleFile.data.id;
 }
 
 async function downloadFile(req, res) {
@@ -127,16 +131,20 @@ async function getFiles(req, res) {
     res.send(result);
 }
 
-async function deleteFile(req, res){
-    
-    const result = await File.findByIdAndUpdate(req.params.id, {
-        $set: { status: Status.noactive }
+async function deleteFile(req, res) {
+
+    const result = await File.findByIdAndUpdate({
+        _id: req.params.id
+    }, {
+        $set: {
+            status: Status.noactive
+        }
     });
 
-    const drive = await authorizate();    
-    
+    const drive = await authorizate();
+
     //No se necesita esperar respuesta.
-    const googleFile =  drive.files.delete({
+    const googleFile = drive.files.delete({
         'fileId': result.googleId
     });
 
@@ -148,8 +156,10 @@ async function deleteFile(req, res){
 async function saveFile(req, res) {
 
     const file = await addFile(req);
-    
-    res.send({ file });
+
+    res.send({
+        file
+    });
 }
 
 

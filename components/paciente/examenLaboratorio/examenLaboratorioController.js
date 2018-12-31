@@ -1,13 +1,12 @@
 'use strict';
 
 const { ExamenLaboratorio } = require('./examenLaboratorio')
-const Status = require('../enums/status.enums')
-const { addFile } = require('../file/fileController')
+const Status = require('../../enums/status.enums')
+const { addFile } = require('../../file/fileController')
 
-module.exports.addExamenLaboratorio = async (req, res) => {
+module.exports.save = async (req, res) => {
    
     let examenLaboratorio = new ExamenLaboratorio(req.body);    
-
     const result = await examenLaboratorio.save();
 
     res.status(200).send({
@@ -15,21 +14,25 @@ module.exports.addExamenLaboratorio = async (req, res) => {
     });
 }
 
-module.exports.getExamenLaboratorio = async (req, res) => {
+module.exports.get = async (req, res) => {
     let result;
 
-    if (req.params.id) {
+    if (req.params.examen) {
         result = await ExamenLaboratorio
-            .findById(req.params.id)
+            .find({ 
+                'paciente' : req.params.id,
+                '_id' : req.params.examen
+            })
             .populate('exam')
             .populate('file');
     } else {
         result = await ExamenLaboratorio
             .find({
+                'paciente' : req.params.id,
                 'status': Status.active
             })
             .populate('exam')
-            // .populate('file')
+            //.populate('file')
             .sort('date');
     }
     
@@ -38,7 +41,7 @@ module.exports.getExamenLaboratorio = async (req, res) => {
     });
 }
 
-module.exports.updExamenLaboratorio = async (req, res) => {
+module.exports.update = async (req, res) => {
     const result = await ExamenLaboratorio.findByIdAndUpdate(req.body._id, {
         $set: req.body
     });
@@ -48,7 +51,7 @@ module.exports.updExamenLaboratorio = async (req, res) => {
     });
 }
 
-module.exports.delExamenLaboratorio = async (req, res) => {
+module.exports.remove = async (req, res) => {
 
     const result = await ExamenLaboratorio.findByIdAndUpdate(req.params.id, {
         $set: {
@@ -59,5 +62,21 @@ module.exports.delExamenLaboratorio = async (req, res) => {
     res.status(200).send({
         result: result
     });
+}
+
+module.exports.removeFile =  async (req, res) => {
+    const id = req.params.examen;
+    const file = req.params.file;
+    
+    const result = await ExamenLaboratorio.update({
+        _id: id
+    },
+    {
+        $pull: { file: file}
+    });
+
+res.send({
+    tratamientos: result
+});
 }
 

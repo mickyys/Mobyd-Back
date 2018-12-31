@@ -8,6 +8,10 @@ module.exports.ExamenLaboratorio = Mongoose.model('examenLaboratorio', Schema({
         type: Mongoose.Schema.ObjectId, 
         default: Mongoose.Types.ObjectId
     },
+    paciente : {
+        type : String,
+        required : true
+    },
     date : { 
         type : Date, 
         required : true 

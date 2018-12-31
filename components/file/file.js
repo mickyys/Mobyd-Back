@@ -30,8 +30,11 @@ var file = Schema(
 file.set('toObject', { virtuals: true });
 
 file.virtual('googleURL').get(function () {
-    return 'https://drive.google.com/file/d/' + this.googleId + '/view';
+    return 'https://drive.google.com/file/d/' + this.googleId + '/preview';
 });
 
+file.virtual('googleURLview').get(function () {
+    return 'https://drive.google.com/file/d/' + this.googleId + '/view';
+});
 
 module.exports.File = mongoose.model('File', file);

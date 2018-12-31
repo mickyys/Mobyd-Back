@@ -16,7 +16,6 @@ const desparasitante = require('./components/desparasitante/desparasitanteServic
 const users = require('./components/user/userService');
 const auth = require('./components/auth/authService');
 const error = require("./components/middleware/error")
-const examenLaboratorio = require('./components/examenLaboratorio/examenLaboratorioService');
 const examen = require('./components/examen/examenService');
 const file = require('./components/file/fileService');
 const servicios = require('./components/servicios/serviciosService');
@@ -44,7 +43,6 @@ app.use('/agenda', agenda);
 app.use('/desparasitante', desparasitante);
 app.use('/users', users);
 app.use('/auth', auth);
-app.use('/examenLaboratorio', examenLaboratorio);
 app.use('/examen', examen);
 app.use('/file', file);
 app.use('/servicios', servicios);
