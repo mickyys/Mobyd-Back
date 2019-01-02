@@ -42,6 +42,10 @@ const pacienteCalendar = Schema({
         type : Boolean,
         default : false
     },
+    serviceEstetic : {
+        type : Mongoose.Schema.Types.ObjectId,
+        ref : 'estetica'
+    },
     status : {
         type : Number,
         default : 1

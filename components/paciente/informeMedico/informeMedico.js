@@ -53,4 +53,4 @@ var informeMedicoSchema = Schema({
     }   
 });
 
-module.exports = Mongoose.model('informeMedico', informeMedicoSchema);
+module.exports = Mongoose.model('PatientMedicalReport', informeMedicoSchema);

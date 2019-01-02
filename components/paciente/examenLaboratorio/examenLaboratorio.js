@@ -3,7 +3,7 @@
 var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
-module.exports.ExamenLaboratorio = Mongoose.model('examenLaboratorio', Schema({
+module.exports.ExamenLaboratorio = Mongoose.model('PatientExams', Schema({
     _id : { 
         type: Mongoose.Schema.ObjectId, 
         default: Mongoose.Types.ObjectId

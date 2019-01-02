@@ -36,4 +36,4 @@ const TratamientoSchema = Schema({
     }
 });
 
-module.exports = Mongoose.model('tratamientos', TratamientoSchema);
+module.exports = Mongoose.model('PatientTreatments', TratamientoSchema);
