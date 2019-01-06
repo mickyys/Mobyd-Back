@@ -26,6 +26,16 @@ async function getPaciente(req, res){
 
 }
 
+async function getPacienteTutor(req, res){
+
+    const tutor = req.params.tutor;
+    const result = await Patient.find({'tutor' : tutor , 'status' : Status.active},'name birthDate race.raza sex microchip');
+
+    res.status(200).send({
+        result
+    });
+}
+
 /**
  * Guarda en la bd la información del paciente
  * @param req The request contiene la información del paciente
@@ -77,6 +87,7 @@ async function delPaciente(req, res){
 
 module.exports = {
     getPaciente,
+    getPacienteTutor,
     savePaciente,
     updPaciente,
     delPaciente

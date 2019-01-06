@@ -18,6 +18,7 @@ api.use('/:id/examen', examen);
 api.use('/:id/servicio', service);
 
 api.get('/:id?', [auth], asyncMiddleware(paciente.getPaciente));
+api.get('/tutor/:tutor', [auth], asyncMiddleware(paciente.getPacienteTutor));
 api.post('/', [auth], asyncMiddleware(paciente.savePaciente));
 api.put('/', [auth], asyncMiddleware(paciente.updPaciente));
 api.delete('/:id/:user', [auth], asyncMiddleware(paciente.delPaciente));

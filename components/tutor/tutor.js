@@ -8,7 +8,7 @@ var tutorSchemma = Schema({
     name : String,
     lastName : String,
     address : String,
-    phone : Number,
+    phone : String,
     birthDate : Date,
     location : String,
     commune :  { type: Mongoose.Schema.Types.Mixed, ref: 'comuna'},
