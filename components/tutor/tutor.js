@@ -12,14 +12,14 @@ var tutorSchemma = Schema({
     birthDate : Date,
     location : String,
     commune :  { type: Mongoose.Schema.Types.Mixed, ref: 'comuna'},
-    communeId : Number, // { type: Mongoose.Schema.Types.ObjectId, ref: 'comuna' },
+    location : String,
     email : String,
     photo : String,
     vip : Number,
-    userCreate : String,
-    userModify : String,
+    userCreate : {},
+    userModify : {},
     dateCreate : {type: Date, default: Date.now},
-    dateModify : {type: Date, default: Date.now} ,
+    dateModify : {type: Date} ,
     status : { type : Number, default: 1} 
 });
 
