@@ -15,9 +15,10 @@ async function getPaciente(req, res){
     let result;
 
     if(id){
-        result = await Patient.findById(id);
+        result = await Patient.findById(id).populate('tutor');
     }else{
-        result = await Patient.find({'status' : Status.active},'name birthDate race.raza sex microchip');
+        result = await Patient.find({'status' : Status.active},'name birthDate race.raza sex microchip')
+        .populate('tutor');
     }
 
     res.status(200).send({
