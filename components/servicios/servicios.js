@@ -16,8 +16,12 @@ module.exports.Servicio = Mongoose.model('servicio', Schema({
         type: Number,
         required: true
     },
+    userCreate : {},
+    userModify : {},
+    dateCreate : {type: Date, default: Date.now},
+    dateModify : {type: Date},
     status : {
-        type : Number,
-        default : 1
+      type : Number,
+      default : 1
     }
 }));

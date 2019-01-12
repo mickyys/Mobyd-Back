@@ -1,4 +1,6 @@
 const { Servicio } = require('./servicios');
+const  moment = require('moment-timezone');
+
 
 module.exports.getServicio = async (req, res) => {
     
@@ -35,7 +37,10 @@ module.exports.updServicio = async (req, res) => {
 module.exports.delServicio = async (req, res) => {
     const result = await Servicio.findByIdAndUpdate(req.params.id, {
         $set: {
-            status: Status.noactive
+            status: Status.noactive,
+            userModify : { name : req.params.user } ,
+            dateModify : moment().tz("America/Santiago").format()
+
         }
     });
 

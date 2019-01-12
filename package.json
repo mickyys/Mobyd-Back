@@ -36,6 +36,7 @@
     "lodash": "^4.17.11",
     "mime-types": "^2.1.21",
     "moment": "^2.23.0",
+    "moment-timezone": "^0.5.23",
     "mongoose": "^5.2.12",
     "morgan": "^1.9.1",
     "xlsx": "^0.14.1"

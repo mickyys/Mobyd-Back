@@ -9,6 +9,6 @@ const api = express.Router();
 api.put('/', [auth], asyncMiddleware(updServicio));
 api.post('/', [auth], asyncMiddleware(addServicio));
 api.get('/', [auth], asyncMiddleware(getServicio));
-api.delete('/:id', [auth], asyncMiddleware(delServicio));
+api.delete('/:id/:user', [auth], asyncMiddleware(delServicio));
 
 module.exports = api;

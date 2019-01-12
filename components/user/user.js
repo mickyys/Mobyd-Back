@@ -16,11 +16,24 @@ var User =  Mongoose.Schema({
         maxlenght : 255,
         required : true 
     },
+    lastName : { 
+        type : String, 
+        minlenght : 0,
+        maxlenght : 255 
+    },
     email : {
         type : String, 
         minlenght : 3,
         maxlenght : 255,
         required : true
+    },
+    address : {
+        type : String, 
+        minlenght : 0,
+        maxlenght : 3000,
+    },
+    commune :  { 
+        type: Mongoose.Schema.Types.Mixed, ref: 'comuna'
     },
     password : {
         type : String, 
