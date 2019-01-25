@@ -13,10 +13,6 @@ if(!config.get('jwtPrivatekey'))
     process.exit(1);
 }
 
-var path = "";
-//var path = "mongodb://MongoBD:Hampmobyd1@ds137581.mlab.com:37581/mobyd";
-
-console.log(config.get('bd'));
 mongoose.connect(config.get('bd'), { 
     'useNewUrlParser': true
 },(err,res)=>{
