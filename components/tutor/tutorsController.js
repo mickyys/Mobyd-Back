@@ -1,7 +1,8 @@
 'use strict';
 
 const Tutor = require('./tutor');
-const Status = require('../enums/status.enums')
+const Status = require('../enums/status.enums');
+const _ = require('lodash');
 
 /**
  * Retorna informacion del tutor por rut
@@ -36,16 +37,29 @@ async function getTutor(req, res) {
             tutor: result
         });
     } else {
+        if(req.query.simple === 'true'){
+        
+            result = await Tutor.find({
+                'status': Status.active
+            }).select('_id name lastName');
+            
+            res.status(200).send({
+                tutors: result
+            });
+        }else{
+            
+            result = await Tutor.find({
+                'status': Status.active
+            });
 
-        result = await Tutor.find({
-            'status': Status.active
-        });
-
-        res.status(200).send({
-            tutors: result
-        });
+            res.status(200).send({
+                tutors: result
+            });
+        }
+       
     }
 }
+
 
 /**
  * Guarda en la bd la información del tutor

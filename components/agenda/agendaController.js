@@ -1,41 +1,62 @@
 'use strict';
-const Joi = require('joi');
 const Agenda = require('./agenda');
+const Tutor = require('../tutor/tutor');
+const config = require('config');
 
-function saveAgenda(req, res){
+async function save(req, res) {
 
-    const SchemaValidate = {
-        fecha : Joi.date().required().label('Fecha es obligatoria'),
-        hora : Joi.required().label('Hora es obligatoria'),
-        informacion : Joi.string().min(3).required().label('Informacion es obligatorio'),
-        paciente : Joi.optional()
+    let agenda = req.body;
 
-    }
+    if(agenda.isNuevoPaciente || agenda.isNuevoTutor){
 
-    Joi.validate(req.body, SchemaValidate, (err, data) => {
-        if (err) {
-            res.status(500).send({
-                error: err.details[0].context.label
+    }else{
+
+        /**
+         * Hora agendada por rut de titular
+         */
+        if(agenda.rut){
+            let tutor = await Tutor.find({_id : agenda.tutor});
+
+            let agendaModel = new Agenda({
+                title : `Tutor : ${tutor[0].name} ${tutor[0].lastName} - Paciente : ${agenda.paciente.name}`,
+                start : agenda.fechaInicio,
+                end : agenda.fechaTermino,                
+                description : agenda.informacion, 
+                // url: config.get('url') + 'patient/' + agenda.paciente._id,
+                horaInicio : agenda.horaInicio,
+                horaTermino : agenda.horaTermino,
+                tutor : tutor[0],
+                paciente : agenda.paciente,
+                nombrePaciente : agenda.nombrePaciente,
+                nombreTutor : agenda.nombreTutor,
+                rut : agenda.rut,
+                correo : agenda.correo,
+                telefono : agenda.telefono,
+                textColor : 'white'
             });
-        } else {
-            var agendas = new Agenda(req.body);
-            agendas.save((err, data) => {
-                if (err) {
-                    res.status(500).send({
-                        message: 'Error al guardar agenda'
-                    });
-                } else {
-                    res.status(200).send({
-                        agenda: data
-                    });
-                }
+
+            agendaModel = await agendaModel.save();
+
+            res.status(200).send({
+                agenda: agendaModel
             });
         }
+        
+    }
+}
 
+async function get(req, res){
+    let agenda = await Agenda.find({
+        'status': Status.active
+    });
+
+    res.status(200).send({
+        agenda : agenda 
     });
 }
 
 
 module.exports = {
-    saveAgenda
+    save,
+    get
 }

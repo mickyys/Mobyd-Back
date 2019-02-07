@@ -11,23 +11,11 @@ const Mucosas = require('./mucosas');
  * @param req The request contiene el ID enviado en la URL
  * @param res The response retorna lista de comunas
  */
-function getComunas(req, res) {
-    Comuna.find({}).sort('descripcion').exec((err, comunas) => {
-        if (err) {
-            res.status(500).send({
-                message: 'Error en servidor'
-            });
-        }
+async function getComunas(req, res) {
 
-        if (!comunas) {
-            res.status(404).send({
-                message: 'No hay comunas'
-            });
-        }
-
+    let result = await Comuna.find({}).sort('descripcion');
         res.status(200).send({
-            comunas
-        });
+            comunas: result
     });
 }
 
@@ -172,7 +160,8 @@ function addVacunas(req, res) {
             vacunas.save((err, vacuna) => {
                 if (err) {
                     res.status(500).send({
-                        message: 'Error al guardar la vacuna'
+                        message: 'Error al guardar la vacuna',
+                        err : err
                     });
                 } else {
                     res.status(200).send({
