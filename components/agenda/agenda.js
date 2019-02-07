@@ -19,6 +19,10 @@ var agendaSchemma = Schema({
     rut : String,
     correo : String,
     telefono : String,
+    userCreate : {},
+    userModify : {},
+    dateCreate : {type: Date, default: Date.now},
+    dateModify : {type: Date, default: Date.now},
     status : { type : Number, default : 1}
 });
 
