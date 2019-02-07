@@ -92,7 +92,7 @@ async function save(req, res) {
 async function get(req, res) {
     let agenda = await Agenda.find({
         'status': Status.active
-    });
+    }).populate('tutor');
 
     res.status(200).send({
         agenda: agenda
