@@ -19,7 +19,11 @@ const examen = require('./components/examen/examenService');
 const file = require('./components/file/fileService');
 const servicios = require('./components/servicios/serviciosService');
 const estetica = require('./components/estetica/esteticaService');
+
 // const migracion = require('./components/migracion/file/read');
+const mail = require('./components/mail/mailService'); 
+
+
 
 var app = express();
 app.use(express.urlencoded({ limit: '50mb', extended : true}));
@@ -30,6 +34,7 @@ app.use(morgan('tiny'));
 app.use(cors());
 app.use(compression());
 
+app.use('/mail', mail);
 app.use('/paciente', paciente);
 app.use('/tutor', tutor);
 app.use('/raza', raza);
