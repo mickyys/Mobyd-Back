@@ -31,12 +31,16 @@ async function save(req, res) {
             vip : null,
             userCreate : { _id : agenda.usuario._id , name : agenda.usuario.name, lastName : agenda.usuario.lastName }
         });
+
         tutor = await tutor.save();
+        agenda.tutor = tutor;
 
     } else {
         tutor = await Tutor.findById({
             _id: agenda.tutor
         });
+
+        agenda.tutor = tutor;
     }
 
     /**
@@ -45,7 +49,7 @@ async function save(req, res) {
     if (agenda.isNuevoPaciente) {
         let paciente = new Paciente({
             name: agenda.nombrePaciente,
-            tutor: tutor,
+            tutor: agenda.tutor._id,
             birthDate : null,
             sex : null,
             microchip : null,
@@ -58,6 +62,7 @@ async function save(req, res) {
         agenda.paciente = paciente;
     }
 
+    console.log(agenda);
 
     /**
      * Hora agendada por rut de titular o nombre de titular
@@ -70,8 +75,8 @@ async function save(req, res) {
         // url: config.get('url') + 'patient/' + agenda.paciente._id,
         horaInicio: agenda.horaInicio,
         horaTermino: agenda.horaTermino,
-        tutor: tutor,
-        paciente: agenda.paciente,
+        tutor: agenda.tutor._id,
+        paciente: agenda.paciente._id,
         nombrePaciente: agenda.nombrePaciente,
         nombreTutor: agenda.nombreTutor,
         apellidoTutor : agenda.apellidoTutor,
@@ -92,7 +97,9 @@ async function save(req, res) {
 async function get(req, res) {
     let agenda = await Agenda.find({
         'status': Status.active
-    }).populate('tutor');
+    }).populate('tutor')
+    .populate('patient')
+    ;
 
     res.status(200).send({
         agenda: agenda
