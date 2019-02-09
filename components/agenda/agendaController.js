@@ -98,7 +98,7 @@ async function get(req, res) {
     let agenda = await Agenda.find({
         'status': Status.active
     }).populate('tutor')
-    .populate('patient')
+    .populate('paciente')
     ;
 
     res.status(200).send({
