@@ -58,7 +58,7 @@ async function getPatientsForTutor(idTutor, idNew) {
             console.log("----------SIN RAZA---------------------");
         }
 
-        let sexo = filter[i].SEXO === 'M' ? filter[i].SEXO : filter[i].SEXO === 'H' ? 'F' : null;
+        let sexo = filter[i].SEXO; // === 'M' ? filter[i].SEXO : filter[i].SEXO === 'H' ? 'F' : null;
         let dateJSON = XLSX.SSF.parse_date_code(filter[i].FECHA_NAC, {
             date1904: false
         });

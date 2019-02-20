@@ -3,6 +3,7 @@ const Agenda = require('./agenda');
 const Tutor = require('../tutor/tutor');
 const Paciente = require('../paciente/paciente')
 const Commune = require('../comunes/comuna');
+const { columnsDoctors }  = require('../medicos/medicosController');
 const config = require('config');
 
 async function save(req, res) {
@@ -77,6 +78,7 @@ async function save(req, res) {
         horaTermino: agenda.horaTermino,
         tutor: agenda.tutor._id,
         paciente: agenda.paciente._id,
+        medico : agenda.medico,
         nombrePaciente: agenda.nombrePaciente,
         nombreTutor: agenda.nombreTutor,
         apellidoTutor : agenda.apellidoTutor,
@@ -99,6 +101,7 @@ async function get(req, res) {
         'status': Status.active
     }).populate('tutor')
     .populate('paciente')
+    .populate('medico', columnsDoctors)
     ;
 
     res.status(200).send({

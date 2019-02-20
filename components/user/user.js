@@ -72,5 +72,11 @@ function validateUser(user){
 }
 
 
+User.set('toObject', { virtuals: true });
+
+User.virtual('fullName').get(function () {
+    return  `${this.lastName} ${this.name}`; 
+});
+
 module.exports.User = Mongoose.model('User', User);
 module.exports.validate = validateUser;

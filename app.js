@@ -19,6 +19,7 @@ const examen = require('./components/examen/examenService');
 const file = require('./components/file/fileService');
 const servicios = require('./components/servicios/serviciosService');
 const estetica = require('./components/estetica/esteticaService');
+const medicos = require('./components/medicos/medicosService');
 
 // const migracion = require('./components/migracion/file/read');
 const mail = require('./components/mail/mailService'); 
@@ -47,6 +48,8 @@ app.use('/examen', examen);
 app.use('/file', file);
 app.use('/servicios', servicios);
 app.use('/estetica', estetica);
+app.use('/medicos', medicos);
+
 app.use(error);
 
 module.exports = app;

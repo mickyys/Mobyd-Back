@@ -53,6 +53,8 @@ module.exports.update = async (req, res) => {
 
 module.exports.remove = async (req, res) => {
 
+    console.log(req.params.id);
+    
     const result = await ExamenLaboratorio.findByIdAndUpdate(req.params.id, {
         $set: {
             status: Status.noactive
