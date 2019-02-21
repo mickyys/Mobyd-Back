@@ -9,7 +9,7 @@ async function save(req, res){
     res.status(200).send({ result });
 }
 
-async function update(req, res){+
+async function update(req, res){
     console.log(req.body);
     const result = await PacienteCalendar.findByIdAndUpdate(req.body._id, req.body);           
     res.status(200).send({ result });

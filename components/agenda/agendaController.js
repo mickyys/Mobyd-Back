@@ -86,6 +86,7 @@ async function save(req, res) {
         correo: agenda.correo,
         telefono: agenda.telefono,
         textColor: 'white',
+        className : agenda.className,
         userCreate : { _id : agenda.usuario._id , name : agenda.usuario.name, lastName : agenda.usuario.lastName }
     });
 
@@ -94,6 +95,40 @@ async function save(req, res) {
     res.status(200).send({
         agenda: agendaModel
     });
+}
+
+
+async function update(req, res){
+    
+    const agenda = req.body;
+    const result = await Agenda.findByIdAndUpdate(agenda._id,
+        {
+            $set : {
+                start: agenda.fechaInicio,
+                end: agenda.fechaTermino,
+                horaInicio: agenda.horaInicio,
+                horaTermino: agenda.horaTermino
+            }
+        }
+    );          
+
+    res.status(200).send({  agenda : result });
+}
+
+
+async function updateConfirmar(req, res){
+    
+    const agenda = req.body;
+    const result = await Agenda.findByIdAndUpdate(agenda._id,
+        {
+            $set : {
+                confirmar: true,
+                title : `${agenda.informacion} - Confirmado` 
+            }
+        }
+    );          
+
+    res.status(200).send({  agenda : result });
 }
 
 async function get(req, res) {
@@ -125,6 +160,8 @@ async function remove(req, res){
 
 module.exports = {
     save,
+    update,
+    updateConfirmar,
     get,
     remove
 }

@@ -7,6 +7,8 @@ const asyncMiddleware = require("../middleware/async");
 var api = express.Router();
 
 api.post('/', [auth], asyncMiddleware(agenda.save));
+api.put('/', [auth], asyncMiddleware(agenda.update));
+api.patch('/', [auth], asyncMiddleware(agenda.updateConfirmar));
 api.get('/', [auth], asyncMiddleware(agenda.get));
 api.delete('/:id', [auth], asyncMiddleware(agenda.remove));
 
