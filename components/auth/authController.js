@@ -1,16 +1,14 @@
 'use strict';
 
 var Joi = require('joi');
-const {User} = require('../user/user')
+const {User } = require('../user/user')
+const {columns} = require('../user/userController');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
 module.exports.auth = async( req, res) => {
     const {error} = validate(req.body);
-
-    console.log(req.body);
-
     if(error) return res.status(400).send(error.details[0].message);
     
     let user = await User.findOne({ 
@@ -25,7 +23,7 @@ module.exports.auth = async( req, res) => {
 
     const token = user.generateAuthToken();
 
-    res.send({token : token});
+    res.send({token : token });
 }
 
 
