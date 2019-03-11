@@ -1,23 +1,25 @@
 'use strict';
 const XLSX = require('xlsx');
-const DBFFile = require('dbffile');
 const Tutor = require('../../tutor/tutor');
 const Paciente = require('../../paciente/paciente');
 const Raza = require('../../raza/raza');
-const moment = require('moment');
 const fs = require('fs');
 const Historial = require('../../paciente/historial/historial');
 
+
+/**
+ * Read File clientes
+ */
 async function readFileTutor() {
-    const workbook = XLSX.readFile('files/clientes.xlsx');
+    const workbook = XLSX.readFile('files/2/clientes.xlsx');
     const workSheet = XLSX.utils.sheet_to_json(workbook.Sheets.Sheet1);
-    let start = new Date();
-    console.log("start : " + start);
+    const start = new Date();
+    console.log(`start : ${start}`);
     
-    for (let i = 0; i < workSheet.length; i++) {        
+    for (let i = 0; i < workSheet.length; i++){
         const tutor = new Tutor({
-            name: workSheet[i].NOMBRE,
-            address: workSheet[i].DIRECCION,
+                name: workSheet[i].NOMBRE,
+                address: workSheet[i].DIRECCION,
             phone: workSheet[i].TELEFONO,
             commune: {
                 "_id": 65,
@@ -37,12 +39,12 @@ async function readFileTutor() {
 
     }
     
-    console.log("start : " + start);
-    console.log("end : " + new Date());
+    console.log(`start : ${start}`);
+    console.log(`end : ${new Date()}`);
 }
 
 async function getPatientsForTutor(idTutor, idNew) {
-    const workbook = XLSX.readFile('files/pacientes.xlsx');
+    const workbook = XLSX.readFile('files/2/pacientes.xlsx');
     const workSheet = XLSX.utils.sheet_to_json(workbook.Sheets.Sheet1);
 
     let filter = workSheet.filter(obj => obj.CODIGO == idTutor);
@@ -58,7 +60,7 @@ async function getPatientsForTutor(idTutor, idNew) {
             console.log("----------SIN RAZA---------------------");
         }
 
-        let sexo = filter[i].SEXO; // === 'M' ? filter[i].SEXO : filter[i].SEXO === 'H' ? 'F' : null;
+        let sexo = filter[i].SEXO === 'M' ? filter[i].SEXO : filter[i].SEXO === 'M' ? 'H' : null;
         let dateJSON = XLSX.SSF.parse_date_code(filter[i].FECHA_NAC, {
             date1904: false
         });
@@ -73,55 +75,75 @@ async function getPatientsForTutor(idTutor, idNew) {
             tutor: idNew,
             death: filter[i].VIVE === 'True' ? 0 : 1,
             userCreate: {
-                name: 'Hector Martinez'
+                name: 'Migracion'
             }
 
         });
 
         let result = await paciente.save();    
-        readFileBD(filter[i].CODIGOPACI, result._id);
+        readClinicaFile(filter[i].CODIGOPACI, result._id);
     }
 }
 
-async function readFileBD(idPatient, idMongoPaciente) {
-    let pathClientes = 'files/clinica.htm';
-    let data = [];
+async function readClinicaFile(idPatient, idMongoPaciente){
+    const workbook = XLSX.readFile('files/2/clinica.xlsx');
+    const workSheet = XLSX.utils.sheet_to_json(workbook.Sheets.Sheet1);
 
-    await fs.readFile(pathClientes, 'UTF-8', (err, contents) => {
-        let content = contents.split('<tr>');
+    let filter = workSheet.filter(obj => obj.CODIGOPACI == idPatient);
 
-        content.forEach(async element => {
-            // let contentTd = element.trim().replace(/<(.|\n)*?>/g, '').split('\r\n');
-            let contentTd = element.trim().split('\r\n');
-            let valueJSON = {
-                'id': contentTd[0].replace('<td>','').replace('</td>',''),
-                'descripcion': contentTd[1].replace('<td>','').replace('</td>','')
-            }
-            data.push(valueJSON);
-            
-            
-        });
-        let historial = data.filter(obj => obj.id === idPatient);
-
-        historial.forEach(async obj =>{
-            let objSplit = obj.descripcion.split('******');   
-
-            
-            objSplit.forEach(async elem => {               
-                if(elem !== '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'){
-                    let historial = new Historial({
-                        patient: idMongoPaciente,
-                        description: elem        
-                    });
-            
-                    let result = await historial.save();                    
-                }                
-            });
-        });               
-    });
-
-    
-    
+    filter.forEach(obj =>{
+        let objSplit = obj.DESCRIP.split('******');
+        objSplit.forEach(async elem => {
+                let historial = new Historial({
+                    patient: idMongoPaciente,
+                    description: elem        
+                });
+        
+                let result = await historial.save();                    
+            });                
+        });    
 }
+
+
+// async function readFileBD(idPatient, idMongoPaciente) {
+//     let pathClientes = 'files/clinica.htm';
+//     let data = [];
+
+//     await fs.readFile(pathClientes, 'UTF-8', (err, contents) => {
+//         let content = contents.split('<tr>');
+
+//         content.forEach(async element => {
+//             // let contentTd = element.trim().replace(/<(.|\n)*?>/g, '').split('\r\n');
+//             let contentTd = element.trim().split('\r\n');
+//             let valueJSON = {
+//                 'id': contentTd[0].replace('<td>','').replace('</td>',''),
+//                 'descripcion': contentTd[1].replace('<td>','').replace('</td>','')
+//             }
+//             data.push(valueJSON);
+            
+            
+//         });
+//         let historial = data.filter(obj => obj.id === idPatient);
+
+//         historial.forEach(async obj =>{
+//             let objSplit = obj.descripcion.split('******');   
+
+            
+//             objSplit.forEach(async elem => {               
+//                 if(elem !== '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'){
+//                     let historial = new Historial({
+//                         patient: idMongoPaciente,
+//                         description: elem        
+//                     });
+            
+//                     let result = await historial.save();                    
+//                 }                
+//             });
+//         });               
+//     });
+
+    
+    
+// }
 
 readFileTutor();

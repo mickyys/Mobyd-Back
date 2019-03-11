@@ -5,6 +5,7 @@ const Paciente = require('../paciente/paciente')
 const Commune = require('../comunes/comuna');
 const { columnsDoctors }  = require('../medicos/medicosController');
 const config = require('config');
+const moment = require('moment');
 
 async function save(req, res) {
 
@@ -132,7 +133,20 @@ async function updateConfirmar(req, res){
 }
 
 async function get(req, res) {
+    let start = moment().add(-1,'days').toDate();
+    let end = moment().add(1,'days').toDate();
+ 
+    if(req.query.start){
+        start = moment(req.query.start,'DD-MM-YYYY').toDate();      
+    }
+    
+    if(req.query.end){
+        end = moment(req.query.end,'DD-MM-YYYY').toDate();
+    }
+
     let agenda = await Agenda.find({
+        'start' : { $gte: start},
+        'end' : { $lte : end},
         'status': Status.active
     }).populate('tutor')
     .populate('paciente')

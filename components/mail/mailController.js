@@ -14,18 +14,16 @@ async function get(req, res) {
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-      host: "mail.mobyd.cl",
-      port: 587,
-      secure: false, // true for 465, false for other ports
+      service: "gmail",
       auth: {
-        user: "veterinaria@mobyd.cl", // generated ethereal user
-        pass: "DQ.7FevczFcs" // generated ethereal password
+        user: "mobyddrive@gmail.com",
+        pass: "Mobyd201811" // generated ethereal password
       }
     });
 
     // setup email data with unicode symbols
     let mailOptions = {
-      from: '"Mobyd 👻" <veterinaria@mobyd.cl>', // sender address
+      from: 'veterinaria@mobyd.cl', // sender address
       to: "hamp.martinez@gmail.com", // list of receivers
       subject: "Hello ✔", // Subject line
       text: "Hello world?", // plain text body

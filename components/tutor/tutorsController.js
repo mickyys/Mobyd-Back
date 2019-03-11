@@ -32,7 +32,7 @@ async function getTutor(req, res) {
     let result;
 
     if (id) {
-        result = await Tutor.findById(id);
+        result = await Tutor.findById(id).sort('lastName name');
         res.status(200).send({
             tutor: result
         });
@@ -41,7 +41,7 @@ async function getTutor(req, res) {
         
             result = await Tutor.find({
                 'status': Status.active
-            }).select('_id name lastName');
+            }).select('_id name lastName').sort('lastName name');
             
             res.status(200).send({
                 tutors: result
@@ -50,7 +50,7 @@ async function getTutor(req, res) {
             
             result = await Tutor.find({
                 'status': Status.active
-            });
+            }).sort('lastName name');
 
             res.status(200).send({
                 tutors: result

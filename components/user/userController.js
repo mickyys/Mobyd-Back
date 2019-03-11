@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const Status = require('../enums/status.enums')
 
 const columns = ['_id', 'name', 'lastName', 'email', 'address', 'commune' , 'isAdmin', 'roles', 'operations', 'photo'];
-
+module.exports.columns = columns;
 
 module.exports.getUserMe = async(req, res) =>{
     const user = await User.findById(req.user);
