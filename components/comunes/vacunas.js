@@ -13,7 +13,12 @@ var VacunasSchema = Schema({
         type: Mongoose.Schema.Types.ObjectId, 
         ref: 'laboratorios'
     },
-    precio : Number     
+    precio : Number,
+    status : { type : Number , default : 1 },    
+    userCreate : {},
+    userModify : {},
+    dateCreate : { type : Date},
+    dateModify : { type : Date}
 });
 
 module.exports = Mongoose.model('vacuna', VacunasSchema);

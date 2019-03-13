@@ -4,7 +4,6 @@ const Tutor = require('../tutor/tutor');
 const Paciente = require('../paciente/paciente')
 const Commune = require('../comunes/comuna');
 const { columnsDoctors }  = require('../medicos/medicosController');
-const config = require('config');
 const moment = require('moment');
 
 async function save(req, res) {
@@ -159,7 +158,7 @@ async function get(req, res) {
 }
 
 async function remove(req, res){
-    console.log(req.params.id);
+
     const agenda = await Agenda.findOneAndUpdate({ _id : req.params.id},{
         $set : { 
             status : Status.noactive 

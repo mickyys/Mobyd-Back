@@ -124,13 +124,17 @@ function addLaboratorios(req, res) {
  */
 async function getVacunas(req, res) {
     if (req.params.laboratorio) {
-        let result = await Vacunas.find({'laboratorio': req.params.laboratorio}).sort('descripcion');
+        let result = await Vacunas.find({'laboratorio': req.params.laboratorio, 'status' : Status.active})
+                                  .populate('laboratorio')
+                                  .sort('descripcion');
         res.status(200).send({
             vacunas: result
         });
 
     } else {
-        let result = await Vacunas.find({}).sort('descripcion');
+        let result = await Vacunas.find({'status' : Status.active})
+                                  .populate('laboratorio')
+                                  .sort('descripcion');
         res.status(200).send({
             vacunas: result
         });
@@ -142,34 +146,36 @@ async function getVacunas(req, res) {
  * @param {*} req The request information
  * @param {*} res The response information 
  */
-function addVacunas(req, res) {
+async function addVacunas(req, res) {
+    
+    const vacunas = new Vacunas(req.body);
+    const result = await vacunas.save();
+            
+    res.status(200).send({
+         vacuna: result
+    });
+}
 
-    const SchemaValidate = {
-        descripcion: Joi.string().min(3).required().label('Descripcion es obligatoria'),
-        laboratorio: Joi.string().required().label('ID de laboratorio es obligatoria'),
-        precio: Joi.number().integer().min(0).required().label('Precio es obligatorio o mayor a 0')
-    }
+async function updateVacunas (req, res) {
+    const result = await Vacunas.findByIdAndUpdate({_id : req.body._id}, {
+        $set: req.body
+    });
 
-    Joi.validate(req.body, SchemaValidate, (err, data) => {
-        if (err) {
-            res.status(500).send({
-                error: err.details[0].context.label
-            });
-        } else {
-            const vacunas = new Vacunas(req.body);
-            vacunas.save((err, vacuna) => {
-                if (err) {
-                    res.status(500).send({
-                        message: 'Error al guardar la vacuna',
-                        err : err
-                    });
-                } else {
-                    res.status(200).send({
-                        vacuna: vacuna
-                    });
-                }
-            });
+    res.status(200).send({
+        result
+    });
+}
+
+
+async function deleteVacunas(req, res) {
+    const vacunas = await Vacunas.findOneAndUpdate({ _id : req.params.id},{
+        $set : { 
+            status : Status.noactive 
         }
+    });
+
+    res.status(200).send({
+        vacunas: vacunas
     });
 }
 
@@ -217,6 +223,8 @@ module.exports = {
     addLaboratorios,
     getVacunas,
     addVacunas,
+    deleteVacunas,
+    updateVacunas,
     getMucosas,
     addMucosas
 }
