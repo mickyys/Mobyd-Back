@@ -1,6 +1,7 @@
 'use strict';
 const Desparasitante = require('./desparasitante');
 const Servicio = require('./servicio');
+const  moment = require('moment-timezone');
 
 async function saveServicio(req, res) {
     const servicio = new Servicio(req.body);
@@ -32,11 +33,36 @@ async function saveDesparasitante(req, res) {
 
 }
 
+async function updateDesparasitante (req, res) {
+    const result = await Desparasitante.findByIdAndUpdate({_id : req.body._id}, {
+        $set: req.body
+    });
+
+    res.status(200).send({
+        result
+    });
+}
+
+
+async function removeDesparasitante(req, res) {
+    const result = await Desparasitante.findOneAndUpdate({ _id : req.params.id},{
+        $set : { 
+            status : Status.noactive, 
+            userModify : { name : req.params.user },
+            dateModify : moment().tz("America/Santiago").format()
+        }
+    });
+
+    res.status(200).send({
+        result
+    });
+}
+
 async function getDesparasitante(req, res) {
 
     const result = await Desparasitante.find({
         'status': Status.active
-    });
+    }).sort('descripcion');
 
     res.status(200).send({
         desparasitantes: result
@@ -47,6 +73,8 @@ async function getDesparasitante(req, res) {
 module.exports = {
     getDesparasitante,
     saveDesparasitante,
+    updateDesparasitante,
+    removeDesparasitante,
     saveServicio,
     getServicio
 }
