@@ -4,6 +4,7 @@ const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
 
 const providerSchema = Schema({
+    rut : String,
     name: String,
     location: String,
     fono: String,
@@ -13,16 +14,20 @@ const providerSchema = Schema({
         fono: String,
         email: String
     },
-    invoices: {
+    documents: {
+        documentType : Number,
         number: Number,
         expirateDate: Date,
-        payment: String,
-        neto: Number,
+        paymentType: String,
+        amount: Number,
         iva: Number,
-        total: Number
+        amountTotal: Number
     },
     payments : {
-
+        number : Number,
+        type : String,
+        expirateDate : Date,
+        amount : Number
     },
     userCreate: {},
     userModify: {},
@@ -39,4 +44,4 @@ const providerSchema = Schema({
     }
 });
 
-module.exports = Mongoose.model('provider', patientSchema);
+module.exports = Mongoose.model('provider', providerSchema);

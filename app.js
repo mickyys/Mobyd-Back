@@ -20,7 +20,7 @@ const file = require('./components/file/fileService');
 const servicios = require('./components/servicios/serviciosService');
 const estetica = require('./components/estetica/esteticaService');
 const medicos = require('./components/medicos/medicosService');
-
+const proveedores = require('./components/proveedores/proveedoresService');
 // const migracion = require('./components/migracion/file/read');
 const mail = require('./components/mail/mailService'); 
 
@@ -49,6 +49,7 @@ app.use('/file', file);
 app.use('/servicios', servicios);
 app.use('/estetica', estetica);
 app.use('/medicos', medicos);
+app.use('/proveedores', proveedores);
 
 app.use(error);
 

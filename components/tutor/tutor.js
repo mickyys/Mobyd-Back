@@ -23,4 +23,6 @@ var tutorSchemma = Schema({
     status : { type : Number, default: 1} 
 });
 
+Mongoose.set('debug', true);
+
 module.exports = Mongoose.model('tutors', tutorSchemma);

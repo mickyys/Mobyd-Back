@@ -38,9 +38,13 @@ async function getTutor(req, res) {
         });
     } else {
         if(req.query.simple === 'true'){
-        
+            let name = req.query.name;
             result = await Tutor.find({
-                'status': Status.active
+                'status': Status.active,
+                 $or : [
+                     {'lastName' : new RegExp('^'+name.toUpperCase(), "i")},
+                     {'name' : new RegExp('^'+name.toUpperCase(), "i")}
+                 ]
             }).select('_id name lastName').sort('lastName name');
             
             res.status(200).send({

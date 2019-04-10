@@ -25,4 +25,6 @@ var patientSchema = Schema({
     }  
 });
 
+Mongoose.set('debug', true);
+
 module.exports = Mongoose.model('patient', patientSchema);
