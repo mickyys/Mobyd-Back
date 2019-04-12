@@ -9,8 +9,8 @@ const columns = ['_id', 'name', 'lastName', 'rut', 'email', 'address', 'commune'
 module.exports.columns = columns;
 
 module.exports.getUserMe = async(req, res) =>{
-    const user = await User.findById(req.user);
-    res.send(_.pick(user, columns));
+    const user = await User.findById(req.user).select(columns);
+    res.send(user);
 }
 
 module.exports.getUsers = async (req, res) => {
