@@ -4,7 +4,7 @@ var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
 var patientSchema = Schema({
-    name : { type : String, require : true},
+    name : { type : String, trim : true, require : true},
     // species : { type: Mongoose.Schema.Types.Mixed, ref: 'razas'},
     // speciesType : Number,
     birthDate : Date,
@@ -13,7 +13,7 @@ var patientSchema = Schema({
     microchip : Number,
     photo : String,
     tutor : { type: Mongoose.Schema.Types.ObjectId, ref: 'tutors' },
-    observations : String,
+    observations : { type : String, trim : true},
     death : Number,
     userCreate : {},
     userModify : {},
