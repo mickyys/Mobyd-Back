@@ -20,7 +20,7 @@ var informeMedicoSchema = Schema({
         type : Date, 
         required : true 
     },
-    atencionClinica : Boolean,
+    atencionClinica : String,
     primeraVez : Boolean,
     motivo  : String,
     examenFisico : String,

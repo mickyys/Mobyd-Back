@@ -11,5 +11,6 @@ api.put('/', [auth], asyncMiddleware(agenda.update));
 api.patch('/', [auth], asyncMiddleware(agenda.updateConfirmar));
 api.get('/', [auth], asyncMiddleware(agenda.get));
 api.delete('/:id', [auth], asyncMiddleware(agenda.remove));
+api.head('/:fecha', agenda.time);
 
 module.exports = api;

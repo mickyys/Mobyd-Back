@@ -4,6 +4,7 @@ const Tutor = require('../tutor/tutor');
 const Paciente = require('../paciente/paciente')
 const Commune = require('../comunes/comuna');
 const { columnsDoctors }  = require('../medicos/medicosController');
+//const moment = require('moment-timezone');
 const moment = require('moment');
 
 async function save(req, res) {
@@ -171,10 +172,23 @@ async function remove(req, res){
 }
 
 
+async function time(req,res){
+    
+    const agenda = await Agenda.find({
+        start : moment(req.params.fecha),
+        status : Status.active 
+    });
+
+    res.status(200).send({
+        agenda: agenda
+    });
+}
+
 module.exports = {
     save,
     update,
     updateConfirmar,
     get,
-    remove
+    remove,
+    time
 }

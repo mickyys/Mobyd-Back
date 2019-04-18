@@ -29,4 +29,6 @@ var agendaSchemma = Schema({
     status : { type : Number, default : 1}
 });
 
+Mongoose.set('debug', true);
+
 module.exports = Mongoose.model('agenda', agendaSchemma);
