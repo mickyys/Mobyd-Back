@@ -47,9 +47,12 @@ async function remove(req, res) {
     const result = await Tratamiento.findByIdAndUpdate({
             _id: id
         },
-        $set = {
-            status: Status.noActive
-        });
+        {
+            $set : {
+                status: Status.noActive
+            }
+        }
+       );
 
     res.send({
         tratamientos: result
