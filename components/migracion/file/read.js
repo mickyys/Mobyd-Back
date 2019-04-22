@@ -5,13 +5,13 @@ const Paciente = require('../../paciente/paciente');
 const Raza = require('../../raza/raza');
 const fs = require('fs');
 const Historial = require('../../paciente/historial/historial');
-
+const version = 3;
 
 /**
  * Read File clientes
  */
 async function readFileTutor() {
-    const workbook = XLSX.readFile('files/2/clientes.xlsx');
+    const workbook = XLSX.readFile(`files/${version}/clientes.xlsx`);
     const workSheet = XLSX.utils.sheet_to_json(workbook.Sheets.Sheet1);
     const start = new Date();
     console.log(`start : ${start}`);
@@ -28,6 +28,7 @@ async function readFileTutor() {
             },
             location: workSheet[i].LOCALIDAD,
             email: workSheet[i].EMAIL,
+            codeVetter : workSheet[i].CODIGO,
             vip: 0,
             userCreate: {
                 name: 'Hector Martinez'
@@ -44,7 +45,7 @@ async function readFileTutor() {
 }
 
 async function getPatientsForTutor(idTutor, idNew) {
-    const workbook = XLSX.readFile('files/2/pacientes.xlsx');
+    const workbook = XLSX.readFile(`files/${version}/pacientes.xlsx`);
     const workSheet = XLSX.utils.sheet_to_json(workbook.Sheets.Sheet1);
 
     let filter = workSheet.filter(obj => obj.CODIGO == idTutor);
@@ -60,7 +61,7 @@ async function getPatientsForTutor(idTutor, idNew) {
             console.log("----------SIN RAZA---------------------");
         }
 
-        let sexo = filter[i].SEXO === 'M' ? filter[i].SEXO : filter[i].SEXO === 'M' ? 'H' : null;
+        let sexo = filter[i].SEXO === 'M' ? filter[i].SEXO : filter[i].SEXO === 'H' ? 'H' : 'H';
         let dateJSON = XLSX.SSF.parse_date_code(filter[i].FECHA_NAC, {
             date1904: false
         });
@@ -71,9 +72,11 @@ async function getPatientsForTutor(idTutor, idNew) {
             birthDate: date,
             race: raza[0],
             sex: sexo,
+            species : filter[i].ESPECIE,
             microchip: filter[i].MICROCHIP,
             tutor: idNew,
             death: filter[i].VIVE === 'True' ? 0 : 1,
+            codeVetter : filter[i].CODIGOPACI,
             userCreate: {
                 name: 'Migracion'
             }
@@ -86,7 +89,7 @@ async function getPatientsForTutor(idTutor, idNew) {
 }
 
 async function readClinicaFile(idPatient, idMongoPaciente){
-    const workbook = XLSX.readFile('files/2/clinica.xlsx');
+    const workbook = XLSX.readFile(`files/${version}/clinica.xlsx`);
     const workSheet = XLSX.utils.sheet_to_json(workbook.Sheets.Sheet1);
 
     let filter = workSheet.filter(obj => obj.CODIGOPACI == idPatient);
@@ -94,7 +97,7 @@ async function readClinicaFile(idPatient, idMongoPaciente){
     filter.forEach(obj =>{
         let objSplit = obj.DESCRIP.split('******');
         objSplit.forEach(async elem => {
-                let historial = new Historial({
+0                let historial = new Historial({
                     patient: idMongoPaciente,
                     description: elem        
                 });
@@ -103,47 +106,5 @@ async function readClinicaFile(idPatient, idMongoPaciente){
             });                
         });    
 }
-
-
-// async function readFileBD(idPatient, idMongoPaciente) {
-//     let pathClientes = 'files/clinica.htm';
-//     let data = [];
-
-//     await fs.readFile(pathClientes, 'UTF-8', (err, contents) => {
-//         let content = contents.split('<tr>');
-
-//         content.forEach(async element => {
-//             // let contentTd = element.trim().replace(/<(.|\n)*?>/g, '').split('\r\n');
-//             let contentTd = element.trim().split('\r\n');
-//             let valueJSON = {
-//                 'id': contentTd[0].replace('<td>','').replace('</td>',''),
-//                 'descripcion': contentTd[1].replace('<td>','').replace('</td>','')
-//             }
-//             data.push(valueJSON);
-            
-            
-//         });
-//         let historial = data.filter(obj => obj.id === idPatient);
-
-//         historial.forEach(async obj =>{
-//             let objSplit = obj.descripcion.split('******');   
-
-            
-//             objSplit.forEach(async elem => {               
-//                 if(elem !== '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'){
-//                     let historial = new Historial({
-//                         patient: idMongoPaciente,
-//                         description: elem        
-//                     });
-            
-//                     let result = await historial.save();                    
-//                 }                
-//             });
-//         });               
-//     });
-
-    
-    
-// }
 
 readFileTutor();

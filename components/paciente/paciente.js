@@ -5,8 +5,7 @@ var Schema = Mongoose.Schema;
 
 var patientSchema = Schema({
     name : { type : String, trim : true, require : true},
-    // species : { type: Mongoose.Schema.Types.Mixed, ref: 'razas'},
-    // speciesType : Number,
+    species : { type : String, trim : true },
     birthDate : Date,
     race :  { type: Mongoose.Schema.Types.Mixed, ref: 'razas'},
     sex : String,
@@ -15,6 +14,7 @@ var patientSchema = Schema({
     tutor : { type: Mongoose.Schema.Types.ObjectId, ref: 'tutors' },
     observations : { type : String, trim : true},
     death : Number,
+    codeVetter : String,
     userCreate : {},
     userModify : {},
     dateCreate : {type: Date, default: Date.now},
@@ -24,7 +24,5 @@ var patientSchema = Schema({
       default : 1
     }  
 });
-
-Mongoose.set('debug', true);
 
 module.exports = Mongoose.model('patient', patientSchema);

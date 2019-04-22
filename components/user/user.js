@@ -78,7 +78,5 @@ User.virtual('fullName').get(function () {
     return  `${this.lastName} ${this.name}`; 
 });
 
-Mongoose.set('debug', true);
-
 module.exports.User = Mongoose.model('User', User);
 module.exports.validate = validateUser;

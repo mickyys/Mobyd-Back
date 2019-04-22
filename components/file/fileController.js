@@ -70,7 +70,7 @@ async function uploadGoogleDrive(file) {
         resource: fileMetadata,
         media: media,
         fields: 'id'
-    });
+    });    
 
     const permissions = {
         role: 'reader',
