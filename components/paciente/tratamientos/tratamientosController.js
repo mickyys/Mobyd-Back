@@ -18,7 +18,8 @@ async function get(req, res) {
         let result = await Tratamiento.find({
                 paciente: id,
                 status: Status.active
-            }).populate('servicesdesparasitantes')
+            }).sort('fecha')
+             .populate('servicesdesparasitantes')
              .populate('vacuna')
              .populate('desparasitante')
              .exec();
@@ -34,7 +35,7 @@ async function get(req, res) {
         }).populate('servicesdesparasitantes')
         .populate('vacunas')
         .populate('desparasitante')
-        .exec();
+        .exec().sort('fecha');
 
         res.status(200).send({
             tratamientos: result
