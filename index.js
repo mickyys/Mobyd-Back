@@ -7,20 +7,22 @@ const port = process.env.PORT || 3000;
 const nameApp = config.get('nameApp');
 
 
-if(!config.get('jwtPrivatekey'))
+if(!process.env.JWT)
 {
     console.error("Fatal error : jwtPrivatekey no definida");
     process.exit(1);
 }
 
-mongoose.connect(config.get('bd'), { 
+const conexion = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_BD}?authSource=admin`;
+
+mongoose.connect(conexion, { 
     'useNewUrlParser': true
 },(err,res)=>{
     if(err){
         throw err;
     }
     app.listen(port, () =>{
-        console.log(`Aplicacion ${nameApp} - iniciado en puerto : ${port}` );
+        console.log(`Aplicacion ${nameApp} - iniciado en puerto : ${port} - BD : ${conexion}`);
     });
 });
 
