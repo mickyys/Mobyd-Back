@@ -13,7 +13,7 @@ if(!process.env.JWT)
     process.exit(1);
 }
 
-const conexion = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_BD}?authSource=admin`;
+const conexion = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_BD}`;
 
 mongoose.connect(conexion, { 
     'useNewUrlParser': true
