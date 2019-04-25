@@ -6,7 +6,7 @@ module.exports =  function(req, res, next){
     if(!token) return res.status(401).send( { mensaje : 'Acceso denegado, se require token'});
 
     try{
-        const decoded = jwt.verify(token, config.get('jwtPrivatekey'));
+        const decoded = jwt.verify(token, process.env.JWT);
         req.user = decoded;
         next();
     }
