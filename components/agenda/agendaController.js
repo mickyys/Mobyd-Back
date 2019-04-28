@@ -49,8 +49,10 @@ async function save(req, res) {
      * Registra nuevo paciente y asocia su ID a la agenda para continuar con el proceso
      */
     if (agenda.isNuevoPaciente) {
+        let number = await Paciente.count() + 1;
         let paciente = new Paciente({
             name: agenda.nombrePaciente,
+            number : number,
             tutor: agenda.tutor._id,
             birthDate : null,
             sex : null,

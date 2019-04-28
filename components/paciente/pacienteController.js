@@ -2,6 +2,7 @@
 
 const Patient = require('./paciente');
 const Status = require('../enums/status.enums');
+const columns = 'name number birthDate race.raza sex microchip';
 
 /**
  * Retorna información del paciente si contiene el ID, en caso de no traer retorna todos los pacientes activos
@@ -17,7 +18,7 @@ async function getPaciente(req, res){
     if(id){
         result = await Patient.findById(id).populate('tutor');
     }else{
-        result = await Patient.find({'status' : Status.active},'name birthDate race.raza sex microchip')
+         result = await Patient.find({'status' : Status.active}, columns)
         .populate('tutor').sort('name');
     }
 
@@ -30,7 +31,7 @@ async function getPaciente(req, res){
 async function getPacienteTutor(req, res){
 
     const tutor = req.params.tutor;
-    const result = await Patient.find({'tutor' : tutor , 'status' : Status.active},'name birthDate race.raza sex microchip').sort('name');
+    const result = await Patient.find({'tutor' : tutor , 'status' : Status.active}, columns).sort('name');
 
     res.status(200).send({
         result
@@ -44,7 +45,11 @@ async function getPacienteTutor(req, res){
  */
 async function savePaciente(req, res){    
     
+    let number = await Patient.count() + 1;
+
     const patient = new Patient(req.body);
+    patient.number = number;
+    
     const result = await patient.save();
 
     res.status(200).send({

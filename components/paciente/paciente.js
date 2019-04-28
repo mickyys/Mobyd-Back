@@ -5,6 +5,7 @@ var Schema = Mongoose.Schema;
 
 var patientSchema = Schema({
     name : { type : String, trim : true, require : true},
+    number: { type : Number, required : true},
     species : { type : String, trim : true },
     birthDate : Date,
     race :  { type: Mongoose.Schema.Types.Mixed, ref: 'razas'},

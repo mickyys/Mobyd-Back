@@ -14,7 +14,7 @@ if(!process.env.JWT)
 }
 
 const conexion = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_BD}`;
-
+console.log(conexion);
 mongoose.connect(conexion, { 
     'useNewUrlParser': true
 },(err,res)=>{
