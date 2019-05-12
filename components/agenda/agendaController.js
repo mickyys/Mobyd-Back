@@ -1,10 +1,10 @@
 'use strict';
-const Agenda = require('./agenda');
+
+const { Agenda, AgendaType } = require('./agenda');
 const Tutor = require('../tutor/tutor');
 const Paciente = require('../paciente/paciente')
 const Commune = require('../comunes/comuna');
 const { columnsDoctors }  = require('../medicos/medicosController');
-//const moment = require('moment-timezone');
 const moment = require('moment');
 
 async function save(req, res) {
@@ -66,8 +66,6 @@ async function save(req, res) {
         agenda.paciente = paciente;
     }
 
-    console.log(agenda);
-
     /**
      * Hora agendada por rut de titular o nombre de titular
      */
@@ -90,6 +88,7 @@ async function save(req, res) {
         telefono: agenda.telefono,
         textColor: 'white',
         className : agenda.className,
+        type : agenda.type,
         userCreate : { _id : agenda.usuario._id , name : agenda.usuario.name, lastName : agenda.usuario.lastName }
     });
 
@@ -137,21 +136,46 @@ async function updateConfirmar(req, res){
 async function get(req, res) {
     let start = moment().add(-1,'days').toDate();
     let end = moment().add(1,'days').toDate();
- 
+    let type = AgendaType.Agenda;
+
     if(req.query.start){
         start = moment(req.query.start,'DD-MM-YYYY').toDate();      
-    }
-    
+    }    
     if(req.query.end){
         end = moment(req.query.end,'DD-MM-YYYY').toDate();
+    }
+    if(req.query.type){
+        type = req.query.type;
     }
 
     let agenda = await Agenda.find({
         'start' : { $gte: start},
         'end' : { $lte : end},
-        'status': Status.active
+        'status': Status.active,
+        'type' : type
     }).populate('tutor')
     .populate('paciente')
+    .populate('medico', columnsDoctors)
+    ;
+
+    res.status(200).send({
+        agenda: agenda
+    });
+}
+
+async function getPatient(req, res){
+    let type = AgendaType.Agenda;
+
+    if(req.query.type){
+        type = req.query.type;
+    }
+
+
+    let agenda = await Agenda.find({
+        'paciente' : req.params.id,
+        'status': Status.active,
+        'type' : type
+    })
     .populate('medico', columnsDoctors)
     ;
 
@@ -191,6 +215,7 @@ module.exports = {
     update,
     updateConfirmar,
     get,
+    getPatient,
     remove,
     time
 }

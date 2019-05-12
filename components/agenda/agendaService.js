@@ -10,6 +10,7 @@ api.post('/', [auth], asyncMiddleware(agenda.save));
 api.put('/', [auth], asyncMiddleware(agenda.update));
 api.patch('/', [auth], asyncMiddleware(agenda.updateConfirmar));
 api.get('/', [auth], asyncMiddleware(agenda.get));
+api.get('/patient/:id', [auth], asyncMiddleware(agenda.getPatient));
 api.delete('/:id', [auth], asyncMiddleware(agenda.remove));
 api.head('/:fecha', agenda.time);
 

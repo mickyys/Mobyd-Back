@@ -55,3 +55,16 @@ module.exports.delInformeMedico = async (req, res) => {
         result: result
     });
 }
+
+
+function addHistorial(informeMedico){
+    let description = "Motivo : " + informeMedico.motivo + "r\n\ " +
+                      "Examen Fisico : " +informeMedico.examenFisico + "r\n\ " +
+                      "F.C. : " + informeMedico.fc + "r\n\ " +
+                      "F.R. : " + informeMedico.fr + "r\n\ " +
+                      "P.A. : " + informeMedico.pa + "r\n\ " +
+                      "T.L.L.C. : " + informeMedico.tllc + "r\n\ " +
+                      "Temperatura : " + informeMedico.temperatura + "r\n\ " +
+                      "Mucosas : " + informeMedico.mucosas.description + "r\n\ " +
+                      "Peso : " + informeMedico.peso + "r\n\ ";
+}

@@ -1,9 +1,14 @@
 'use strict';
 
-var Mongoose = require('mongoose');
-var Schema = Mongoose.Schema;
+const Mongoose = require('mongoose');
+const Schema = Mongoose.Schema;
 
-var agendaSchemma = Schema({
+const AgendaType = {
+    Agenda : 'agenda',
+    Control : 'control'
+
+}
+const agendaSchemma = Schema({
     start : Date,
     end : Date,
     title : String,
@@ -21,6 +26,7 @@ var agendaSchemma = Schema({
     rut : String,
     correo : String,
     telefono : String,
+    type : { type : String, default : AgendaType.Agenda },
     confirmar : { type : Boolean , default : false},
     userCreate : {},
     userModify : {},
@@ -29,4 +35,8 @@ var agendaSchemma = Schema({
     status : { type : Number, default : 1}
 });
 
-module.exports = Mongoose.model('agenda', agendaSchemma);
+Mongoose.set('debug', true);
+
+
+module.exports.Agenda = Mongoose.model('agenda', agendaSchemma);
+module.exports.AgendaType = AgendaType;
