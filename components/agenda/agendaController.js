@@ -97,13 +97,12 @@ async function save(req, res) {
 
     agendaModel = await agendaModel.save();
 
-    /*
+    
     if(agenda.correo){        
         agenda._id = agendaModel._id;
         await sendMailReserva(agenda);
     }
-    */
-
+    
     res.status(200).send({
         agenda: agendaModel
     });

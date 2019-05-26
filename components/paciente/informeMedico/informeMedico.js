@@ -17,8 +17,7 @@ var informeMedicoSchema = Schema({
         required : true 
     },
     fechaSintomas : {
-        type : Date, 
-        required : true 
+        type : Date
     },
     atencionClinica : String,
     primeraVez : Boolean,
