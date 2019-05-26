@@ -6,6 +6,9 @@ const Paciente = require('../paciente/paciente')
 const Commune = require('../comunes/comuna');
 const { columnsDoctors }  = require('../medicos/medicosController');
 const moment = require('moment');
+const { sendMailReserva } = require('../mail/mailController');
+
+
 
 async function save(req, res) {
 
@@ -94,6 +97,12 @@ async function save(req, res) {
 
     agendaModel = await agendaModel.save();
 
+    
+    if(agenda.correo){        
+        agenda._id = agendaModel._id;
+        await sendMailReserva(agenda);
+    }
+    
     res.status(200).send({
         agenda: agendaModel
     });
@@ -153,9 +162,24 @@ async function get(req, res) {
         'end' : { $lte : end},
         'status': Status.active,
         'type' : type
-    }).populate('tutor')
+    })
+    .populate('tutor')
     .populate('paciente')
     .populate('medico', columnsDoctors)
+    .sort('start')
+    ;
+
+    res.status(200).send({
+        agenda: agenda
+    });
+}
+
+async function getAgenda(req, res){
+    let agenda = await Agenda.findById(req.params.id)
+    .populate('tutor')
+    .populate('paciente')
+    .populate('medico', columnsDoctors)
+    .sort('start')
     ;
 
     res.status(200).send({
@@ -169,7 +193,6 @@ async function getPatient(req, res){
     if(req.query.type){
         type = req.query.type;
     }
-
 
     let agenda = await Agenda.find({
         'paciente' : req.params.id,
@@ -216,6 +239,7 @@ module.exports = {
     updateConfirmar,
     get,
     getPatient,
+    getAgenda,
     remove,
     time
 }

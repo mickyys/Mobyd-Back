@@ -1,6 +1,13 @@
 "use strict";
 const nodemailer = require("nodemailer");
+const mailgun = require("mailgun-js");
+const path = require('path');
+const fs = require('fs');
+const moment = require('moment');
+const config = require('config');
 
+const DOMAIN = "mg.mobyd.cl";
+const mg = mailgun({apiKey: "74c4b165075a8b48d6a11c8fecc9ebc7-e566273b-b21aa945", domain: DOMAIN});  
 
 async function get(req, res) {
 
@@ -51,6 +58,60 @@ async function get(req, res) {
   }
 }
 
+async function getMailgun(req,res){     
+  let filename = path.join(__dirname, 'template/img/logo.png');
+  let contents = fs.readFileSync(__dirname + '/template/reservaHoraResponsive.html', 'utf8');
+  const data = {
+    from: "hamp@mobyd.cl",
+    to: "hamp.martinez@gmail.com",
+    subject: "Hello",
+    html : contents,
+    inline:filename
+  };
+
+  
+  mg.messages().send(data, function (error, body) {
+    console.log(body);
+    res.send(body);
+  });
+}
+
+async function sendMailReserva(agenda){
+
+  let imgName = 'mobyd.png';
+  let filename = path.join(__dirname, 'template/img/' + imgName);
+  let contents = fs.readFileSync(__dirname + '/template/reservaHoraResponsive.html', 'utf8');
+
+  if(agenda.tutor.lastName === undefined){
+    agenda.tutor.lastName = '';
+  }
+  if(agenda.tutor.name === undefined){
+    agenda.tutor.name = '';
+  }
+
+  contents = contents.replace('{IMG}', imgName);
+  contents = contents.replace('{TUTOR}', `${agenda.tutor.name} ${agenda.tutor.lastName}`);
+  contents = contents.replace('{PACIENTE}', agenda.paciente.name);
+  contents = contents.replace('{FECHA}', moment(agenda.fechaInicio).format('DD-MM-YYYY'));
+  contents = contents.replace('{HORA}', agenda.horaInicio);
+  contents = contents.replace('{MEDICO}', `${agenda.medico.name} ${agenda.medico.lastName}`);
+  contents = contents.replace(/{ID}/g, agenda._id);
+  contents = contents.replace(/{URL}/g, config.get('url'));
+
+  const data = {
+    from: "contacto@mobyd.cl",
+    to: 'hamp.martinez@gmail.com', //agenda.correo
+    subject: "🐶 Reserva Hora | Mobyd 🐱",
+    html : contents,
+    inline: filename
+  };
+
+  mg.messages().send(data, function (error, body) {    
+  });
+}
+
 module.exports = {
-  get
+  get,
+  getMailgun,
+  sendMailReserva
 }

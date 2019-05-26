@@ -8,10 +8,11 @@ var api = express.Router();
 
 api.post('/', [auth], asyncMiddleware(agenda.save));
 api.put('/', [auth], asyncMiddleware(agenda.update));
-api.patch('/', [auth], asyncMiddleware(agenda.updateConfirmar));
+api.patch('/', asyncMiddleware(agenda.updateConfirmar));
 api.get('/', [auth], asyncMiddleware(agenda.get));
+api.get('/:id', asyncMiddleware(agenda.getAgenda));
 api.get('/patient/:id', [auth], asyncMiddleware(agenda.getPatient));
-api.delete('/:id', [auth], asyncMiddleware(agenda.remove));
+api.delete('/:id', asyncMiddleware(agenda.remove));
 api.head('/:fecha', agenda.time);
 
 module.exports = api;
