@@ -92,6 +92,7 @@ async function save(req, res) {
         textColor: 'white',
         className : agenda.className,
         type : agenda.type,
+        value : agenda.value,
         userCreate : { _id : agenda.usuario._id , name : agenda.usuario.name, lastName : agenda.usuario.lastName }
     });
 
@@ -101,6 +102,12 @@ async function save(req, res) {
     if(agenda.correo){        
         agenda._id = agendaModel._id;
         await sendMailReserva(agenda);
+
+        await Agenda.findByIdAndUpdate(agendaModel._id, {
+            $set : {
+                sendMail : true
+            }           
+        })
     }
     
     res.status(200).send({

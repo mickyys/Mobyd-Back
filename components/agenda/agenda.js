@@ -27,6 +27,8 @@ const agendaSchemma = Schema({
     correo : String,
     telefono : String,
     type : { type : String, default : AgendaType.Agenda },
+    sendMail : { type : Boolean , default : false},
+    value : { type : Number },
     confirmar : { type : Boolean , default : false},
     userCreate : {},
     userModify : {},
