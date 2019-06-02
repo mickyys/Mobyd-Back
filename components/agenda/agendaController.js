@@ -117,16 +117,32 @@ async function save(req, res) {
 
 
 async function update(req, res){
-    
+
     const agenda = req.body;
+    let params = {};
+    if(agenda.informacion || agenda.telefono || agenda.correo ||  agenda.value){
+        params = {
+            start: agenda.fechaInicio,
+            end: agenda.fechaTermino,
+            horaInicio: agenda.horaInicio,
+            horaTermino: agenda.horaTermino,
+            description : agenda.informacion,
+            telefono : agenda.telefono,
+            correo : agenda.correo,
+            value : agenda.value
+        }        
+    }else{
+        params = {
+            start: agenda.fechaInicio,
+            end: agenda.fechaTermino,
+            horaInicio: agenda.horaInicio,
+            horaTermino: agenda.horaTermino,
+        }
+    }   
+    
     const result = await Agenda.findByIdAndUpdate(agenda._id,
         {
-            $set : {
-                start: agenda.fechaInicio,
-                end: agenda.fechaTermino,
-                horaInicio: agenda.horaInicio,
-                horaTermino: agenda.horaTermino
-            }
+            $set : params
         }
     );          
 
