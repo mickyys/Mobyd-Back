@@ -6,7 +6,6 @@ const config = require('config');
 const port = process.env.PORT || 3000;
 const nameApp = config.get('nameApp');
 
-
 if(!process.env.JWT)
 {
     console.error("Fatal error : jwtPrivatekey no definida");

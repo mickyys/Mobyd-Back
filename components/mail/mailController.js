@@ -6,8 +6,7 @@ const fs = require('fs');
 const moment = require('moment');
 const config = require('config');
 
-const DOMAIN = "mg.mobyd.cl";
-const mg = mailgun({apiKey: "74c4b165075a8b48d6a11c8fecc9ebc7-e566273b-b21aa945", domain: DOMAIN});  
+const mg = mailgun({apiKey: process.env.EMAIL_MAILGUN, domain: process.env.EMAIL_DOMAIN});  
 
 async function get(req, res) {
 
@@ -30,7 +29,7 @@ async function get(req, res) {
 
     // setup email data with unicode symbols
     let mailOptions = {
-      from: 'veterinaria@mobyd.cl', // sender address
+      from: 'mobyddrive@gmail.com', // sender address
       to: "hamp.martinez@gmail.com", // list of receivers
       subject: "Hello ✔", // Subject line
       text: "Hello world?", // plain text body
