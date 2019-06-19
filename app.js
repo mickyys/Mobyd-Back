@@ -23,6 +23,7 @@ const medicos = require('./components/medicos/medicosService');
 const proveedores = require('./components/proveedores/proveedoresService');
 // const migracion = require('./components/migracion/file/read');
 const mail = require('./components/mail/mailService'); 
+const type = require('./components/tipos/tipoService'); 
 
 
 
@@ -50,6 +51,7 @@ app.use('/servicios', servicios);
 app.use('/estetica', estetica);
 app.use('/medicos', medicos);
 app.use('/proveedores', proveedores);
+app.use('/type', type);
 
 app.use(error);
 

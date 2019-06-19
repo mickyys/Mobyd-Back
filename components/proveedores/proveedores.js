@@ -4,31 +4,44 @@ const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
 
 const providerSchema = Schema({
-    rut : String,
+    rut : { type : String,  uppercase: true, index: { unique: true } }, 
     name: String,
     location: String,
     fono: String,
     email: String,
-    contact: {
+    contacts: [{
         name: String,
         fono: String,
-        email: String
-    },
-    documents: {
-        documentType : Number,
+        email: String,
+        info : String
+    }],
+    documents: [{
+        documentType : {
+            _id : String,
+            description : String,
+            __v : Number
+        }, 
         number: Number,
         expirateDate: Date,
-        paymentType: String,
+        paymentType: {
+            _id : String,
+            description : String,
+            __v : Number
+        },  
         amount: Number,
         iva: Number,
         amountTotal: Number
-    },
-    payments : {
+    }],
+    payments: [{
         number : Number,
-        type : String,
+        paymentType : {
+            _id : String,
+            description : String,
+            __v : Number
+        }, 
         expirateDate : Date,
         amount : Number
-    },
+    }],
     userCreate: {},
     userModify: {},
     dateCreate: {

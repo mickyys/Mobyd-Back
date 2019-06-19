@@ -6,8 +6,8 @@ const Schema = Mongoose.Schema;
 const AgendaType = {
     Agenda : 'agenda',
     Control : 'control'
-
 }
+
 const agendaSchemma = Schema({
     start : Date,
     end : Date,

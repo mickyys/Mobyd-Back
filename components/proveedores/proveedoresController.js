@@ -15,13 +15,13 @@ async function get(req, res){
     }
 
     res.status(200).send({
-        result 
+        result
     });
 }
 
 async function add(req, res){
     let proveedores = new Proveedores(req.body);
-    let result = proveedores.save();
+    let result = await proveedores.save();
 
     res.status(200).send({
         result 
@@ -29,23 +29,22 @@ async function add(req, res){
 }
 
 async function update(req, res){
-    let result = Proveedores.findOneAndUpdate(req.body._id, 
+    let result = await Proveedores.findOneAndUpdate(req.body._id, 
         req.body
     );
 
-
     res.status(200).send({
-        result 
+        result
     });
 }
 
 async function remove(req, res){    
-    let result = Proveedores.findOneAndUpdate(req.params.id, {
+    let result = await Proveedores.findOneAndUpdate(req.params.id, {
         status : status.noactive
     });
 
     res.status(200).send({
-        result 
+        result
     });
 }
   
