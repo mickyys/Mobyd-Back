@@ -19,8 +19,27 @@ const providerSchema = Schema({
         documentType : {
             _id : String,
             description : String,
-            __v : Number
-        }, 
+            __v : Number,
+            status : { 
+                type : Number, 
+                default : 1 
+            }
+        },
+        products : [{
+            name : String,
+            qty : Number,
+            unitaryPrice : Number,
+            stockMin : Number,    
+            valueBuy : Number,
+            valueSale : Number,
+            amount : Number,
+            tax : Number,
+            amountTotal : Number,   
+            status : { 
+                type : Number, 
+                default : 1 
+            }
+        }], 
         number: Number,
         expirateDate: Date,
         paymentType: {
@@ -37,7 +56,11 @@ const providerSchema = Schema({
         paymentType : {
             _id : String,
             description : String,
-            __v : Number
+            __v : Number,
+            status : { 
+                type : Number, 
+                default : 1 
+            }
         }, 
         expirateDate : Date,
         amount : Number

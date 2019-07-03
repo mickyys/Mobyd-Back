@@ -52,8 +52,22 @@ var User =  Mongoose.Schema({
     photo :{
         type : String
     },
+    rut : {
+        type : String
+    },
+    className : {
+        type : String
+    },
     roles : [],
-    operations : []
+    operations : [],
+    redSocial : {
+        id : {
+            type : String
+        },
+        name : {
+            type : String
+        }
+    }
 });
 
 User.methods.generateAuthToken = function(){    
@@ -75,7 +89,7 @@ function validateUser(user){
 User.set('toObject', { virtuals: true });
 
 User.virtual('fullName').get(function () {
-    return  `${this.lastName} ${this.name}`; 
+    return  `${this.name} ${this.lastName}`; 
 });
 
 module.exports.User = Mongoose.model('User', User);

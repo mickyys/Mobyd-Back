@@ -1,11 +1,8 @@
 'use strict';
 
 var Joi = require('joi');
-const {User } = require('../user/user')
-const {columns} = require('../user/userController');
+const { User } = require('../user/user')
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const config = require("config");
 
 module.exports.auth = async( req, res) => {
     const {error} = validate(req.body);

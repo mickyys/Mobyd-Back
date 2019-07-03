@@ -42,6 +42,9 @@
     "mongoose": "^5.2.12",
     "morgan": "^1.9.1",
     "nodemailer": "^5.1.1",
+    "passport": "^0.4.0",
+    "passport-google-oauth": "^2.0.0",
+    "request": "^2.88.0",
     "xlsx": "^0.14.1"
   },
   "devDependencies": {
