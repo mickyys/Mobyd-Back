@@ -15,4 +15,18 @@ async function add(req, res){
     });
 }
 
+async function get(req, res){
+
+    console.log(req.params.id);
+    
+    let result = await Proveedores.find(
+        { "documents._id" : req.params.id}
+    ,{ lean: false });
+
+    res.status(200).send({
+        result 
+    });
+}
+
 module.exports.addDocument = add;
+module.exports.getDocument = get;
