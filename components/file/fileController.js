@@ -53,7 +53,6 @@ async function addFile(req) {
     return files;
 }
 
-
 async function uploadGoogleDrive(file) {
 
     const drive = await authorizate();
@@ -63,7 +62,7 @@ async function uploadGoogleDrive(file) {
 
     const media = {
         mimeType: file.type,
-        body: await fs.createReadStream(file.path)
+        body: fs.createReadStream(file.path)
     };
 
     const googleFile = await drive.files.create({
