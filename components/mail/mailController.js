@@ -99,7 +99,7 @@ async function sendMailReserva(agenda){
 
   const data = {
     from: "contacto@mobyd.cl",
-    to: 'hamp.martinez@gmail.com', //agenda.correo
+    to: agenda.correo,
     subject: "🐶 Reserva Hora | Mobyd 🐱",
     html : contents,
     inline: filename
