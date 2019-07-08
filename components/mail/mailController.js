@@ -105,7 +105,8 @@ async function sendMailReserva(agenda){
     inline: filename
   };
 
-  mg.messages().send(data, function (error, body) {    
+  mg.messages().send(data, (error, body) => {    
+    console.log(body);
   });
 }
 

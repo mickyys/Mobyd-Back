@@ -21,7 +21,7 @@ async function get(req, res){
     
     let result = await Proveedores.find(
         { "documents._id" : req.params.id}
-    ,{ lean: false });
+    );
 
     res.status(200).send({
         result 

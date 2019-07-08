@@ -152,16 +152,24 @@ async function update(req, res){
 
 async function updateConfirmar(req, res){
     
-    const agenda = req.body;
-    const result = await Agenda.findByIdAndUpdate(agenda._id,
-        {
-            $set : {
-                confirmar: true,
-                title : `${agenda.informacion} - Confirmado` 
+    let result;
+       
+    if(req.query.info){
+        let agenda = await Agenda.findById(req.body._id);
+        agenda.title = `${agenda.title} - Confirmado por cliente`
+        result = agenda.save();
+    }else{
+        let agenda = req.body;
+        result = await Agenda.findByIdAndUpdate(agenda._id,
+            {
+                $set : {
+                    confirmar: true,
+                    title : `${agenda.informacion} - Confirmado` 
+                }
             }
-        }
-    );          
-
+        );     
+    }
+    
     res.status(200).send({  agenda : result });
 }
 
@@ -232,11 +240,14 @@ async function getPatient(req, res){
 
 async function remove(req, res){
 
-    const agenda = await Agenda.findOneAndUpdate({ _id : req.params.id},{
-        $set : { 
-            status : Status.noactive 
-        }
-    });
+    let agenda = await Agenda.findById(req.params.id);
+    if(req.query.info){
+        agenda.title = `${agenda.title} - Eliminada por cliente`,
+        agenda.className = 'event-delete';    
+    }else{
+        agenda.status = Status.noactive
+    }
+    agenda.save();
 
     res.status(200).send({
         agenda: agenda
