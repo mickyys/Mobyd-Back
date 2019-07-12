@@ -17,10 +17,9 @@ async function add(req, res){
 
 async function get(req, res){
 
-    console.log(req.params.id);
-    
     let result = await Proveedores.find(
-        { "documents._id" : req.params.id}
+        {'documents._id': req.params.id }, 
+        {'documents.$': 1 }
     );
 
     res.status(200).send({

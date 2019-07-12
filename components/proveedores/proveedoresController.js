@@ -29,8 +29,15 @@ async function add(req, res){
 }
 
 async function update(req, res){
-    let result = await Proveedores.findOneAndUpdate(req.body._id, 
-        req.body
+    console.log(req.body)
+    let result = await Proveedores.update({ _id : req.body._id}, 
+        {
+            rut : req.body.rut,
+            name : req.body.name,
+            location : req.body.location,
+            fono : req.body.fono,
+            email : req.body.email
+         }
     );
 
     res.status(200).send({

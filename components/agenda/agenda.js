@@ -37,7 +37,7 @@ const agendaSchemma = Schema({
     status : { type : Number, default : 1}
 });
 
-//Mongoose.set('debug', true);
+Mongoose.set('debug', true);
 
 
 module.exports.Agenda = Mongoose.model('agenda', agendaSchemma);

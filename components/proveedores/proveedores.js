@@ -49,7 +49,11 @@ const providerSchema = Schema({
         },  
         amount: Number,
         iva: Number,
-        amountTotal: Number
+        amountTotal: Number,
+        status : { 
+            type : Number, 
+            default : 1 
+        }
     }],
     payments: [{
         number : Number,
