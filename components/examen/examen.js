@@ -16,8 +16,17 @@ module.exports.Examen = Mongoose.model('examen', Schema({
         type: Number,
         required: true
     },
-    status : {
-        type : Number,
-        default : 1
+    userCreate: {},
+    userModify: {},
+    dateCreate: {
+        type: Date,
+        default: Date.now
+    },
+    dateModify: {
+        type: Date
+    },
+    status: {
+        type: Number,
+        default: 1
     }
 }));
