@@ -67,7 +67,8 @@ var User =  Mongoose.Schema({
         name : {
             type : String
         }
-    }
+    },
+    company : { type: Mongoose.Schema.Types.ObjectId, ref: 'general' }
 });
 
 User.methods.generateAuthToken = function(){    
