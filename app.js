@@ -21,13 +21,12 @@ const servicios = require('./components/servicios/serviciosService');
 const estetica = require('./components/estetica/esteticaService');
 const medicos = require('./components/medicos/medicosService');
 const proveedores = require('./components/proveedores/proveedoresService');
-// const migracion = require('./components/migracion/file/read');
 const mail = require('./components/mail/mailService'); 
 const type = require('./components/tipos/tipoService'); 
+const revacunation = require('./components/revacunacion/revacunacionService');
+const general = require('./components/general/generalService');
 
-
-
-var app = express();
+const app = express();
 app.use(express.urlencoded({ limit: '50mb', extended : true}));
 app.use(express.json({ limit: '50mb'}));
 app.use(express.static('public'));
@@ -52,6 +51,8 @@ app.use('/estetica', estetica);
 app.use('/medicos', medicos);
 app.use('/proveedores', proveedores);
 app.use('/type', type);
+app.use('/revacunation', revacunation);
+app.use('/general', general)
 
 app.use(error);
 
