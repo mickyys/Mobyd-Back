@@ -8,6 +8,8 @@ const revacunacionSchemma = Schema({
     tutor : { type: Mongoose.Schema.Types.ObjectId, ref: 'tutors' , required :  true},
     paciente : { type: Mongoose.Schema.Types.ObjectId, ref: 'patient', required : true},       
     vacuna : { type : String },
+    lastControl : { type : String },
+    lastControlDate : { type : Date},
     userCreate : {},
     userModify : {},
     dateCreate : {type: Date, default: Date.now},
