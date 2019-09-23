@@ -1,6 +1,7 @@
 'use strict';
 
 const Proveedores = require('./proveedores');
+const Product = require('../products/productsController');
 const status = require('../enums/status.enums');
 
 async function get(req, res){
@@ -19,17 +20,20 @@ async function get(req, res){
     });
 }
 
-async function add(req, res){
-    let proveedores = new Proveedores(req.body);
-    let result = await proveedores.save();
-
-    res.status(200).send({
-        result 
-    });
+async function add(proveedor){   
+        let proveedores = new Proveedores(proveedor);
+        let result = await proveedores.save();
+    
+        if(req.body.documents){
+            let document = req.body.documents;
+            await document.products.forEach(async (data) =>{
+                    await Product.addOrUpdateNewProductForName(data.name, data.qty, data.price, data.type, data.user);
+            });
+        };
+        return result;
 }
 
 async function update(req, res){
-    console.log(req.body)
     let result = await Proveedores.update({ _id : req.body._id}, 
         {
             rut : req.body.rut,
@@ -37,7 +41,8 @@ async function update(req, res){
             location : req.body.location,
             fono : req.body.fono,
             email : req.body.email
-         }
+         },
+         { new: true },
     );
 
     res.status(200).send({
@@ -46,7 +51,7 @@ async function update(req, res){
 }
 
 async function remove(req, res){    
-    let result = await Proveedores.findOneAndUpdate(req.params.id, {
+    let result = await Proveedores.findOneAndUpdate({_id : req.params.id}, {
         status : status.noactive
     });
 

@@ -5,7 +5,7 @@ const {User , validate} = require('./user')
 const bcrypt = require('bcrypt');
 const Status = require('../enums/status.enums')
 
-const columns = ['_id', 'name', 'lastName', 'rut', 'email', 'address', 'commune' , 'isAdmin', 'roles', 'operations',  'company'];
+const columns = ['_id', 'name', 'lastName', 'rut', 'email', 'photo', 'address', 'commune' , 'isAdmin', 'roles', 'operations',  'company'];
 module.exports.columns = columns;
 
 module.exports.getUserMe = async(req, res) =>{
@@ -39,8 +39,6 @@ module.exports.addUser = async( req, res) => {
 }
 
 module.exports.update = async(req, res)=>{
-    
-
     if(req.body.password){
         console.log("password");
         let user = await User.findById(req.body._id);

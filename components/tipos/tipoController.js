@@ -3,17 +3,15 @@ const TipoPagos = require('./tipoPagos');
 const TipoProductos = require('./tipoProductos');
 
 async function getTipoDocumentos(req, res){
-
-    result = await TipoDocumentos.find().sort('description')  
-
+    let result = await TipoDocumentos.find().sort('description')  
     res.status(200).send({
         result
     });
 }
 
 async function getTipoPagos(req, res){
-    result = await TipoPagos.find().sort('description')  
-
+    let result = await TipoPagos.find().sort('description');
+    console.log(result);  
     res.status(200).send({
         result
     });

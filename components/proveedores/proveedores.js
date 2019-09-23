@@ -4,7 +4,7 @@ const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
 
 const providerSchema = Schema({
-    rut : { type : String,  uppercase: true, index: { unique: true } }, 
+    rut : { type : String,  uppercase: true }, 
     name: String,
     location: String,
     fono: String,
@@ -23,23 +23,24 @@ const providerSchema = Schema({
             status : { 
                 type : Number, 
                 default : 1 
-            }
+            }            
         },
         products : [{
             name : String,
             qty : Number,
-            unitaryPrice : Number,
-            stockMin : Number,    
-            valueBuy : Number,
-            valueSale : Number,
+            purchasePrice : Number,
+            salePrice : Number,
+            type : { type: Mongoose.Schema.Types.ObjectId, ref: 'ProductsType', required : true},            
             amount : Number,
             tax : Number,
             amountTotal : Number,   
+            percent : Number,
             status : { 
                 type : Number, 
                 default : 1 
             }
         }], 
+        percent : { type : Number},
         number: Number,
         expirateDate: Date,
         paymentType: {

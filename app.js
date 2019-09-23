@@ -25,6 +25,8 @@ const mail = require('./components/mail/mailService');
 const type = require('./components/tipos/tipoService'); 
 const revacunation = require('./components/revacunacion/revacunacionService');
 const general = require('./components/general/generalService');
+const products = require('./components/products/productsService');
+const tax = require('./components/tax/taxService');
 
 const app = express();
 app.use(express.urlencoded({ limit: '50mb', extended : true}));
@@ -52,7 +54,9 @@ app.use('/medicos', medicos);
 app.use('/proveedores', proveedores);
 app.use('/type', type);
 app.use('/revacunation', revacunation);
-app.use('/general', general)
+app.use('/general', general);
+app.use('/products', products);
+app.use('/tax', tax);
 
 app.use(error);
 
