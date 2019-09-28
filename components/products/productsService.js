@@ -1,4 +1,4 @@
-const { get, getNameLike, getName, add, update, remove, discountAdd, discountDelete } = require('./productsController');
+const { get, getNameLike, getName, add, update, remove, discountAdd, discountDelete, chargesAdd, chargesDelete } = require('./productsController');
 const auth = require('../middleware/auth');
 const asyncMiddleware = require("../middleware/async");
 const api = require('express').Router();
@@ -38,6 +38,13 @@ api.delete('/discount/:id', [auth], asyncMiddleware(async(req,res) => {
     });
 }));
 
+api.delete('/charges/:id', [auth], asyncMiddleware(async(req,res) => {
+    let result = await chargesDelete(req.params.id);
+    res.status(200).send({
+        result
+    });
+}));
+
 api.post('/', [auth], asyncMiddleware(async(req,res) => {
     let result = await add(req.body);
     res.status(200).send({
@@ -47,6 +54,13 @@ api.post('/', [auth], asyncMiddleware(async(req,res) => {
 
 api.post('/:id/discount', [auth], asyncMiddleware(async(req,res) => {
     let result = await discountAdd(req.params.id, req.body);
+    res.status(200).send({
+        result
+    });
+}));
+
+api.post('/:id/charges', [auth], asyncMiddleware(async(req,res) => {
+    let result = await chargesAdd(req.params.id, req.body);
     res.status(200).send({
         result
     });

@@ -1,11 +1,11 @@
 'use strict';
 
 const _ = require('lodash');
-const {User , validate} = require('./user')
+const {User} = require('./user')
 const bcrypt = require('bcrypt');
 const Status = require('../enums/status.enums')
 
-const columns = ['_id', 'name', 'lastName', 'rut', 'email', 'photo', 'address', 'commune' , 'isAdmin', 'roles', 'operations',  'company'];
+const columns = ['_id', 'fullName', 'name', 'lastName', 'rut', 'email', 'photo', 'address', 'commune' , 'isAdmin', 'roles', 'operations',  'company'];
 module.exports.columns = columns;
 
 module.exports.getUserMe = async(req, res) =>{
@@ -19,8 +19,6 @@ module.exports.getUsers = async (req, res) => {
 }
 
 module.exports.addUser = async( req, res) => {
-    // const {error} = validate(req.body);
-    // if(error) return res.status(400).send(error.details[0].message);
     
     let user = await User.findOne({ 
         email : req.body.email,

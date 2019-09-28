@@ -122,7 +122,27 @@ const discountAdd = async (id, discount) => {
 const discountDelete = async (id) => {      
     let result = await Products.findOneAndUpdate(
         { },
-        { $pull : { 'discount' : { _id : id} }},
+        { $pull : { 'discount' : {  _id : id} }},
+        { multi : true, upsert : false,  new : true }
+    );
+    
+    return result;    
+}
+
+const chargesAdd = async (id, charges) => {       
+    let result = await Products.findOneAndUpdate(
+        { _id : id },
+        { $push : { 'charges' : charges }},
+        { new : true }
+    );
+    
+    return result;    
+}
+
+const chargesDelete = async (id) => {      
+    let result = await Products.findOneAndUpdate(
+        { },
+        { $pull : { 'charges' : {  _id : id} }},
         { multi : true, upsert : false,  new : true }
     );
     
@@ -138,3 +158,5 @@ module.exports.addOrUpdateNewProductForName = addOrUpdateNewProductForName;
 module.exports.remove = remove;
 module.exports.discountAdd = discountAdd;
 module.exports.discountDelete = discountDelete;
+module.exports.chargesAdd = chargesAdd;
+module.exports.chargesDelete = chargesDelete;

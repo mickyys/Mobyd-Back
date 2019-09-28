@@ -69,6 +69,9 @@ var User =  Mongoose.Schema({
         }
     },
     company : { type: Mongoose.Schema.Types.ObjectId, ref: 'general' }
+},{
+    'toObject' : { virtuals: true },
+    'toJSON' : { virtuals: true }
 });
 
 User.methods.generateAuthToken = function(){    
@@ -86,12 +89,10 @@ function validateUser(user){
     return Joi.validate(user, schema);
 }
 
-
-User.set('toObject', { virtuals: true });
-
 User.virtual('fullName').get(function () {
-    return  `${this.name} ${this.lastName}`; 
+    return `${this.name} ${this.lastName}`; 
 });
+
 
 module.exports.User = Mongoose.model('User', User);
 module.exports.validate = validateUser;

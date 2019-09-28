@@ -3,6 +3,8 @@
 const mongoose = require('mongoose');
 const app = require('./app');
 const config = require('config');
+const saslprep = require('saslprep')
+
 const port = process.env.PORT || 3001;
 const nameApp = config.get('nameApp');
 
@@ -12,10 +14,10 @@ if(!process.env.JWT)
     process.exit(1);
 }
 
-const conexion = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_BD}`;
-console.log(conexion);
+const conexion = saslprep(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_BD}`);
 mongoose.connect(conexion, { 
-    'useNewUrlParser': true
+    'useNewUrlParser': true,
+    'useUnifiedTopology': true 
 },(err,res)=>{
     if(err){
         throw err;
