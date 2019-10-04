@@ -26,21 +26,20 @@ const providerSchema = Schema({
             }            
         },
         products : [{
-            name : String,
+            name : { type : String, uppercase : true},
             qty : Number,
-            purchasePrice : Number,
-            salePrice : Number,
-            type : { type: Mongoose.Schema.Types.ObjectId, ref: 'ProductsType', required : true},            
+            type : { type: Mongoose.Schema.Types.ObjectId, ref: 'ProductsType', required : true},      
+            price : Number,
+            priceTax : Number,
+            priceTotal : Number,      
             amount : Number,
-            tax : Number,
-            amountTotal : Number,   
-            percent : Number,
+            amountTax : Number,
+            amountTotal : Number, 
             status : { 
                 type : Number, 
                 default : 1 
             }
         }], 
-        percent : { type : Number},
         number: Number,
         expirateDate: Date,
         paymentType: {
@@ -49,7 +48,7 @@ const providerSchema = Schema({
             __v : Number
         },  
         amount: Number,
-        iva: Number,
+        amountTax: Number,
         amountTotal: Number,
         status : { 
             type : Number, 

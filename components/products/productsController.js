@@ -11,7 +11,7 @@ async function get(id){
     }
 }
 
-const addOrUpdateNewProductForName = async (name, qty, price, type, user) => {    
+const addOrUpdateNewProductForName = async (name, qty, price, tax, type, user) => {    
     
     let product = await this.getName(name);
     let result;
@@ -24,9 +24,13 @@ const addOrUpdateNewProductForName = async (name, qty, price, type, user) => {
             date : new Date()
         }
             
-        if(product.price < price){
-            product.price = price;
-        }   
+        if(product.priceSale < price){
+            product.priceSale = price;
+        }
+        
+        if(product.tax < tax){
+            product.tax = tax;
+        }
                 
         result = await this.update(product.id, product.name, product.barcode, product.qty, product.qtyMin, product.price, product.type, product.user);
 
@@ -36,7 +40,9 @@ const addOrUpdateNewProductForName = async (name, qty, price, type, user) => {
             name : name,
             qty : qty,
             type : type,
-            price : price,   
+            priceSale : price,
+            price : price, 
+            tax : tax, 
             create : {
                 user : user,
                 date : new Date()

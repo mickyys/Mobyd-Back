@@ -24,11 +24,14 @@ async function add(proveedor){
         let proveedores = new Proveedores(proveedor);
         let result = await proveedores.save();
     
-        if(req.body.documents){
-            let document = req.body.documents;
-            await document.products.forEach(async (data) =>{
-                    await Product.addOrUpdateNewProductForName(data.name, data.qty, data.price, data.type, data.user);
-            });
+        if(proveedor.documents){
+            await proveedor.documents.forEach(async(document) =>{
+                console.log(document);
+                await document.products.forEach(async (product) =>{
+                        console.log(product);
+                        await Product.addOrUpdateNewProductForName(product.name, product.qty, product.price, product.type, product.user);
+                });
+            });            
         };
         return result;
 }

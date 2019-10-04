@@ -12,7 +12,7 @@ async function add(id, document){
     );
     
     document.products.forEach(async (data) =>{
-        await Product.addOrUpdateNewProductForName(data.name, data.qty, data.salePrice, data.type, data.user);
+        await Product.addOrUpdateNewProductForName(data.name, data.qty, data.price, data.priceTax, data.type, data.user);
     });
     
     return result;
@@ -23,11 +23,11 @@ async function get(req, res){
     let result = await Proveedores.find(
         {'documents._id': req.params.id }, 
         {'documents.$': 1 }
-    ).sort({
+    ).populate('documents.products.type')
+    .sort({
         'expirateDate' : -1        
     });
-
-    console.log(result);    
+      
     res.status(200).send({
         result 
     });

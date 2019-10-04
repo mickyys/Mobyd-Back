@@ -5,7 +5,9 @@ const productsSchema = Schema({
     name : { type : String, uppercase : true, trim : true, required : true },
     qty : { type : Number },   
     qtyMin : { type : Number },
+    priceSale : { type : Number },
     price : { type : Number },
+    tax : { type : Number },
     barcode : { type : String },
     type : { type: Mongoose.Schema.Types.ObjectId, ref: 'ProductsType', required : true},   
     discount : [{

@@ -24,10 +24,11 @@ var file = Schema(
         googleId : {
             type : String
         }
+    },{
+        'toObject' : { virtuals: true },
+        'toJSON' : { virtuals: true }
     }
 );
-
-file.set('toObject', { virtuals: true });
 
 file.virtual('googleURL').get(function () {
     return 'https://drive.google.com/file/d/' + this.googleId + '/preview';
