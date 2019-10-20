@@ -66,9 +66,7 @@ module.exports.changePassword = async(req, res) =>{
     res.header('x-auth-token',token).send(_.pick(user, columns));    
 }
 
-async function validPassword(newPassword, bcryptPassword){
-    console.log("validPassword");
-    
+async function validPassword(newPassword, bcryptPassword){       
     const validPassword = await bcrypt.compare(newPassword, bcryptPassword);
     return validPassword;
 }

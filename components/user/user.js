@@ -1,9 +1,7 @@
 'use strict';
 
-const Joi = require('joi');
 const Mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const config = require('config');
 
 var User =  Mongoose.Schema({
     _id : { 
@@ -79,15 +77,6 @@ User.methods.generateAuthToken = function(){
     return token;
 }
 
-function validateUser(user){
-    const schema = {
-        name : Joi.string().min(5).max(50).required(),
-        email : Joi.string().min(5).max(255).required().email(),
-        password : Joi.string().min(5).max(255).required()
-    }
-
-    return Joi.validate(user, schema);
-}
 
 User.virtual('fullName').get(function () {
     return `${this.name} ${this.lastName}`; 
@@ -95,4 +84,3 @@ User.virtual('fullName').get(function () {
 
 
 module.exports.User = Mongoose.model('User', User);
-module.exports.validate = validateUser;

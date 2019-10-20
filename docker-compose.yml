@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  mobyd:  
+     build: .
+     env_file:
+         - development.env     
+     volumes:    
+         - .:/opt/app  
+         - /opt/app/node_modules
+     ports:    
+         - 3001:3001
+         - 9229:9229
+     depends_on:
+         - mongo
+     command: npm start
+  mongo:
+      image: 'hampcl/mongo-12:1.0.0'
+      ports:
+          - 27017:27017
+      volumes:
+          - mongodata:/data/db
+volumes:
+  mongodata:

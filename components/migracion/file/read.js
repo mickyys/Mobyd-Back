@@ -1,5 +1,6 @@
 'use strict';
 const XLSX = require('xlsx');
+const Excel = require('exceljs');
 const Tutor = require('../../tutor/tutor');
 const Paciente = require('../../paciente/paciente');
 const Raza = require('../../raza/raza');
@@ -127,4 +128,35 @@ async function readServicios(){
     );
 }
 
-// readServicios();
+async function getClients(){
+
+    let tutor = await Tutor.find();
+
+    let workbook = new Excel.Workbook();
+    let columnNormal = 20;
+    let columnGrande = 40;
+    let fileName = `PersonasCorreo.xlsx`;
+    
+    let worksheet = workbook.addWorksheet('Empresas');
+
+    worksheet.columns = [
+        { header: 'Nombre', key: 'Nombre', width: columnNormal},
+        { header: 'Email', key: 'Email', width: columnNormal},
+        { header: 'Telefono', key: 'Telefono', width: columnNormal}
+    ];
+
+    tutor.forEach(element => {
+        worksheet.addRow({
+            Nombre : element.name,
+            Email : element.email,
+            Telefono : element.phone
+        });
+    });
+
+    workbook.xlsx.writeFile(fileName)
+    .then(()=>{       
+        console.log('archivo generado correctamente');
+    });
+}
+
+getClients();
