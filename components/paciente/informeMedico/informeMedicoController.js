@@ -1,59 +1,79 @@
 'use strict';
 
 const InformeMedico = require('./informeMedico');
+const Product = require('../../products/productsController')
 
-module.exports.addInformeMedico = async (req, res) => {
-    const informeMedico = new InformeMedico(req.body);
+module.exports.addInformeMedico = async (body) => {
+    const informeMedico = new InformeMedico(body);
+
+    if(body.products.length > 0){
+        body.products.forEach(product => {
+            Product.updateQty(product._id, -product.qty);
+        });
+    }
+
     const result = await informeMedico.save();
-
-    res.status(200).send({
-        result
-    });
+    return result;
 }
 
-module.exports.getInformeMedico = async (req, res) => {
+module.exports.getInformeMedico = async (idInforme, idPaciente) => {
 
     let result;
 
-    if (req.params.informe) {
+    if (idInforme) {
         result = await InformeMedico
-            .findById({_id : req.params.informe}, )
+            .findById({_id : idInforme}, )
             .sort('descripcion');
     } else {
         result = await InformeMedico
             .find({
-                'paciente' : req.params.id,
+                'paciente' : idPaciente,
                 'status': Status.active
             })
             .sort('descripcion');
     }
     
-    res.status(200).send({
-        informesMedicos: result
-    });
+    return result;
 }
 
-module.exports.updInformeMedico = async (req, res) => {
-    const result = await InformeMedico.findByIdAndUpdate(req.body._id, {
-        $set: req.body
+module.exports.updInformeMedico = async (body) => {
+
+    let informeMedico = await this.getInformeMedico(body._id, null);
+    let productsArray  = [];
+
+    body.products.forEach(product =>{
+        let prod = informeMedico.products.find(x => x._id === product._id);
+        if(prod === undefined){
+            productsArray.push({ ...product});
+        }else{
+            if(product.qty != prod.qty){
+                productsArray.push({ ...product, qty : (product.qty - prod.qty)});
+            }
+        } 
     });
 
-    res.status(200).send({
-        result
+    if(productsArray.length > 0){
+        productsArray.forEach(product => {
+            Product.updateQty(product._id, -product.qty);
+        });
+    }
+
+    const result = await InformeMedico.findByIdAndUpdate(body._id, {
+        $set: body
     });
+
+    return result;
 }
 
-module.exports.delInformeMedico = async (req, res) => {
+module.exports.delInformeMedico = async (idInforme) => {
 
-    const result = await InformeMedico.findByIdAndUpdate({_id : req.params.informe}, {
+    const result = await InformeMedico.findByIdAndUpdate({_id : idInforme}, {
         $set: {
             status: Status.noactive
         }
     });
 
-    res.status(200).send({
-        result: result
-    });
+    return result;
 }
 
 

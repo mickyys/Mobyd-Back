@@ -3,7 +3,8 @@ services:
   mobyd:  
      build: .
      env_file:
-         - development.env     
+        #  - development.env     
+         - production.env
      volumes:    
          - .:/opt/app  
          - /opt/app/node_modules
@@ -14,7 +15,7 @@ services:
          - mongo
      command: npm start
   mongo:
-      image: 'hampcl/mongo-12:1.0.0'
+      image: 'hampcl/mongo-12:1.0.1'
       ports:
           - 27017:27017
       volumes:

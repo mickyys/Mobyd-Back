@@ -5,12 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Docker: Attach to Node",
             "type": "node",
             "request": "attach",
-            "name": "Attach by Process ID",
-            "processId": "${command:PickProcess}"
+            "port": 9229,
+            "address": "localhost",
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/opt/app",
+            "protocol": "inspector",
+            "restart": true  
         },
-        
         {
             "type": "chrome",
             "request": "launch",

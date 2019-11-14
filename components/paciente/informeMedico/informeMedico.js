@@ -46,6 +46,8 @@ var informeMedicoSchema = Schema({
         type : Number,
         min : 0
     },
+    services : [],
+    products : [],
     userCreate : {},
     userModify : {},
     dateCreate : {type: Date, default: Date.now},

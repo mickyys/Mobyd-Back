@@ -4,7 +4,7 @@
   "description": "Programa veterinario",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -L index.js",
+    "start": "nodemon --inspect=0.0.0.0 -L index.js",
     "test": "echo \"Error: no test specidifed \" && exit 1"
   },
   "engines": {

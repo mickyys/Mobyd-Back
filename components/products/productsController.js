@@ -106,6 +106,14 @@ async function update(id, name, barcode, qty, qtyMin, price, type, modify){
     return result;    
 }
 
+async function updateQty(id, qty){
+    let result = await Products.findOneAndUpdate({ _id : id}, {
+        $inc: { qty : qty }
+    });
+
+    return result;
+}
+
 async function remove(id){    
     console.log(id);
     let result = await Products.findOneAndUpdate({ _id : id}, {
@@ -166,3 +174,4 @@ module.exports.discountAdd = discountAdd;
 module.exports.discountDelete = discountDelete;
 module.exports.chargesAdd = chargesAdd;
 module.exports.chargesDelete = chargesDelete;
+module.exports.updateQty = updateQty;
