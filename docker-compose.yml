@@ -3,8 +3,8 @@ services:
   mobyd:  
      build: .
      env_file:
-        #  - development.env     
-         - production.env
+         - development.env     
+        #  - production.env
      volumes:    
          - .:/opt/app  
          - /opt/app/node_modules

@@ -19,7 +19,13 @@ api.use('/:id/examen', examen);
 api.use('/:id/servicio', service);
 api.use('/:id/historial', historial);
 
-api.get('/:id?', [auth], asyncMiddleware(paciente.getPaciente));
+api.get('/:id?', [auth], asyncMiddleware(async(req, res) =>{
+    let result = await paciente.getPaciente(req.params.id);
+    res.status(200).send({
+        result
+    });
+}));
+
 api.get('/tutor/:tutor', [auth], asyncMiddleware(paciente.getPacienteTutor));
 api.post('/', [auth], asyncMiddleware(paciente.savePaciente));
 api.put('/', [auth], asyncMiddleware(paciente.updPaciente));
