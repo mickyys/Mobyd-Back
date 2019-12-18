@@ -7,7 +7,7 @@ const columnsDoctors = "_id fullName name lastName email className";
 
 module.exports.columnsDoctors = columnsDoctors;
 
-module.exports.getDoctors = async (req, res) => {
+const getDoctors = async (req, res) => {
     const users = await User.find({
         status: Status.active,
         roles: {
@@ -18,4 +18,21 @@ module.exports.getDoctors = async (req, res) => {
     ;
 
     res.send(users);
+}
+
+const getDoctorForName = async (name) => {
+    const user = await User.findOne({
+        status: Status.active,
+        roles: { $all: ["Doctor"] },
+        name : name
+    })
+    .select(columnsDoctors)
+    ;
+
+    return user;
+}
+
+module.exports = {
+    getDoctors,
+    getDoctorForName
 }

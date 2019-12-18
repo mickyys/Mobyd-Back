@@ -1,10 +1,14 @@
 'use strict';
 
 const Orders = require('./orders');
+const Tutor = require('../tutor/tutor');
+const TutorController = require('../tutor/tutorsController');
+const Patient = require('../paciente/paciente');
+const PaientController = require('../paciente/pacienteController');
 const Medicos = require('./../medicos/medicosController');
 
 const getOrderNumber = async () => {
-    return await Orders.count() + 1001;     
+    return await Orders.countDocuments() + 1001;     
 }
 
 const addOrder = async (tutor, patient, products, services, amount, tax, amountTotal, doctor, user, reference) => {  
@@ -33,6 +37,55 @@ const addOrder = async (tutor, patient, products, services, amount, tax, amountT
     const result = await order.save();  
     
     return result;
+}
+
+const addOrderWithPayment = async (order, tutor, patient, products, services, amount, tax, amountTotal, doctor, user, payment) =>{
+    
+    const orderNumber = await getOrderNumber();
+    let orderTutor = await TutorController.getTutorForName('');
+    let orderPatient = await PaientController.getPatientForName('');    
+    let orderDoctor = await Medicos.getDoctorForName('');
+
+    
+    if(tutor._id == null && tutor._id == undefined && tutor.name != null ){  
+        orderTutor = await new Tutor({ name : tutor.name }).save();
+    }else if(tutor._id != null){
+        orderTutor = tutor._id;
+    }
+
+    if(patient._id == null  && patient._id == undefined && patient.name != null){  
+        orderPatient = await new Patient({ name : patient.name, number : await PaientController.getPacienteNumber() }).save();
+    }else if (patient._id != null){
+        orderPatient = patient._id;
+    }
+
+    if(doctor != null && doctor != undefined){
+        orderDoctor = doctor;
+    }
+
+    const newOrder = new Orders({
+        tutor : orderTutor,
+        patient : orderPatient,
+        orderNumber : orderNumber,
+        orderDate : order.date,
+        orderStatus : order.status,
+        products : products,
+        services : services,
+        amount : amount,
+        tax : tax,
+        amountTotal : amountTotal,
+        doctor: orderDoctor,
+        payment : payment,
+        create : {
+            user : user.name,
+            date : Date()
+        }
+    });
+
+    const result = await newOrder.save();
+    
+    return result;
+
 }
 
 const getOrders = async (status, dateStart, dateEnd) => {
@@ -90,3 +143,4 @@ module.exports.getOrders = getOrders;
 module.exports.updPayment = updPayment;
 module.exports.getOrderById = getOrderById;
 module.exports.updPaymentAll = updPaymentAll;
+module.exports.addOrderWithPayment = addOrderWithPayment;

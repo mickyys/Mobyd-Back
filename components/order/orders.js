@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const orderSchema = Schema({
-    tutor : { type: mongoose.Schema.Types.ObjectId, ref: 'tutors' },
-    patient : { type: mongoose.Schema.Types.ObjectId, ref: 'patient' },
+    tutor : { type: mongoose.Schema.Types.ObjectId, ref: 'tutors', require : true  },
+    patient : { type: mongoose.Schema.Types.ObjectId, ref: 'patient', require : true  },
     orderNumber : { type : Number, require : true },
     orderDate : { type : Date, require : true },
     orderStatus : { 
@@ -35,7 +35,7 @@ const orderSchema = Schema({
         },
         status : { type : Number , default : 1}
     }],
-    doctor :  { type: mongoose.Schema.Types.ObjectId, ref : 'User' }, 
+    doctor :  { type: mongoose.Schema.Types.ObjectId, ref : 'User', require : true  }, 
     create : {
         user : { type : String, trim : true },
         date : Date

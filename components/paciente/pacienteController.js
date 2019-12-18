@@ -24,6 +24,12 @@ async function getPaciente(id){
     return result;
 }
 
+async function getPatientForName(name){
+    return await Patient.findOne({
+        name : name
+    });
+}
+
 async function getPacienteTutor(req, res){
 
     const tutor = req.params.tutor;
@@ -87,10 +93,16 @@ async function delPaciente(req, res){
     });
 }
 
+const getPacienteNumber = async () => {
+    return await Patient.countDocuments() + 1;     
+}
+
 module.exports = {
     getPaciente,
     getPacienteTutor,
     savePaciente,
     updPaciente,
-    delPaciente
+    delPaciente,
+    getPacienteNumber,
+    getPatientForName
 }

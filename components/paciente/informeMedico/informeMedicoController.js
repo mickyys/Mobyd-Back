@@ -27,7 +27,9 @@ module.exports.addInformeMedico = async (body) => {
         url : `patient/${body.paciente}/InformeMedico/list`
     };
 
-    const order  = await Orders.addOrder(tutor, body.paciente, body.products, body.services, body.valor, 0 , body.valor, doctor, user, reference);
+    if(body.valor > 0){
+        const order  = await Orders.addOrder(tutor, body.paciente, body.products, body.services, body.valor, 0 , body.valor, doctor, user, reference);
+    }    
 
     return result;
 }

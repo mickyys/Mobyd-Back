@@ -21,6 +21,12 @@ async function getTutorRut(req, res) {
     });
 }
 
+async function getTutorForName(name){
+    return await Tutor.findOne({
+        name : name
+    });
+}
+
 
 /**
  * Retorna información del tutor si contiene el ID, en caso de no traer retorna todos los pacientes activos
@@ -130,5 +136,6 @@ module.exports = {
     getTutorRut,
     saveTutor,
     updTutor,
-    delTutor
+    delTutor,
+    getTutorForName
 }
