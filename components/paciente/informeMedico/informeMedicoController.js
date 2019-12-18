@@ -1,18 +1,36 @@
 'use strict';
 
 const InformeMedico = require('./informeMedico');
+const Orders = require('../../order/ordersController');
+const Paciente = require('../../paciente/pacienteController');
 const Product = require('../../products/productsController')
 
 module.exports.addInformeMedico = async (body) => {
     const informeMedico = new InformeMedico(body);
 
     if(body.products.length > 0){
-        body.products.forEach(product => {
-            Product.updateQty(product._id, -product.qty);
+        body.products.forEach(async (product) => {
+            await Product.updateQty(product._id, -product.qty);
         });
     }
 
+    const paciente = await Paciente.getPaciente(body.paciente);
+
+    const tutor  = paciente.tutor.id;
+    const doctor = body.userCreate._id;
+    const user   = body.userCreate.fullName;
+
     const result = await informeMedico.save();
+
+    const reference = {
+        name : 'Informe Medico',
+        url : `patient/${body.paciente}/InformeMedico/list`
+    };
+
+    if(body.valor > 0){
+        const order  = await Orders.addOrder(tutor, body.paciente, body.products, body.services, body.valor, 0 , body.valor, doctor, user, reference);
+    }    
+
     return result;
 }
 

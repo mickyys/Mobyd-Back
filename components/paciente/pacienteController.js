@@ -10,9 +10,8 @@ const columns = 'name number birthDate race.raza sex microchip';
  * @param res The response retorna estado y pacientes en formato rest
  */
 
-async function getPaciente(req, res){
-
-    const id = req.params.id;
+async function getPaciente(id){
+ 
     let result;
 
     if(id){
@@ -22,10 +21,13 @@ async function getPaciente(req, res){
         .populate('tutor').sort('name');
     }
 
-    res.status(200).send({
-        result
-    });
+    return result;
+}
 
+async function getPatientForName(name){
+    return await Patient.findOne({
+        name : name
+    });
 }
 
 async function getPacienteTutor(req, res){
@@ -91,10 +93,16 @@ async function delPaciente(req, res){
     });
 }
 
+const getPacienteNumber = async () => {
+    return await Patient.countDocuments() + 1;     
+}
+
 module.exports = {
     getPaciente,
     getPacienteTutor,
     savePaciente,
     updPaciente,
-    delPaciente
+    delPaciente,
+    getPacienteNumber,
+    getPatientForName
 }

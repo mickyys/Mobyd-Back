@@ -27,6 +27,7 @@ const revacunation = require('./components/revacunacion/revacunacionService');
 const general = require('./components/general/generalService');
 const products = require('./components/products/productsService');
 const tax = require('./components/tax/taxService');
+const order = require('./components/order/ordersService');
 
 const app = express();
 app.use(express.urlencoded({ limit: '50mb', extended : true}));
@@ -57,6 +58,7 @@ app.use('/revacunation', revacunation);
 app.use('/general', general);
 app.use('/products', products);
 app.use('/tax', tax);
+app.use('/order', order);
 
 app.use(error);
 
