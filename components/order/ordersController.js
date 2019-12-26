@@ -88,6 +88,17 @@ const addOrderWithPayment = async (order, tutor, patient, products, services, am
 
 }
 
+const getOrdersForPaymentDate = async (dateStart, dateEnd) =>{
+    
+    let result = await Orders.find({'status' : Status.active, 'payment.create.date' : { $gte: dateStart, $lte: dateEnd } })
+        .populate('tutor')
+        .populate('patient')
+        .populate('doctor', Medicos.columnsDoctors)
+        .sort('status');    
+
+    return result;
+}
+
 const getOrders = async (status, dateStart, dateEnd) => {
     
     let mongoStatus = {'status' : Status.active,  'create.date' : { $gte: dateStart, $lte: dateEnd} };
@@ -138,9 +149,12 @@ const updPaymentAll = async (id, status, payment, products, services) => {
 }
 
 
-module.exports.addOrder = addOrder;
-module.exports.getOrders = getOrders;
-module.exports.updPayment = updPayment;
-module.exports.getOrderById = getOrderById;
-module.exports.updPaymentAll = updPaymentAll;
-module.exports.addOrderWithPayment = addOrderWithPayment;
+module.exports = {
+    addOrder,
+    getOrders,
+    getOrdersForPaymentDate,
+    updPayment,
+    getOrderById,
+    updPaymentAll,
+    addOrderWithPayment
+}
