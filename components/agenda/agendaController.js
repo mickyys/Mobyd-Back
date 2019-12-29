@@ -89,8 +89,8 @@ async function save(req, res) {
         rut: agenda.rut,
         correo: agenda.correo,
         telefono: agenda.telefono,
-        textColor: 'white',
-        className : agenda.className,
+        // textColor: 'white',
+        // className : agenda.className,
         type : agenda.type,
         value : agenda.value,
         userCreate : { _id : agenda.usuario._id , name : agenda.usuario.name, lastName : agenda.usuario.lastName }

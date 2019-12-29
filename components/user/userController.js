@@ -5,20 +5,28 @@ const {User} = require('./user')
 const bcrypt = require('bcrypt');
 const Status = require('../enums/status.enums')
 
-const columns = ['_id', 'fullName', 'name', 'lastName', 'rut', 'email', 'photo', 'address', 'commune' , 'isAdmin', 'roles', 'operations',  'company'];
-module.exports.columns = columns;
+const columns = ['_id', 'fullName', 'name', 'lastName', 'rut', 'email', 'photo', 'address', 'commune' , 'isAdmin', 'roles', 'operations',  'company', 'color'];
 
-module.exports.getUserMe = async(req, res) =>{
+const getUserMe = async(req, res) =>{
     const user = await User.findById(req.user).select(columns);
     res.send(user);
 }
 
-module.exports.getUsers = async (req, res) => {
+const getUsers = async (req, res) => {
     const users = await User.find({ status : Status.active }).sort("name");
     res.send(users);
 }
 
-module.exports.addUser = async( req, res) => {
+const removeUser = async(id) =>{
+    
+    let user = await User.findByIdAndUpdate(id,{
+        status : Status.noactive
+    });
+
+    return user;
+}
+
+const addUser = async( req, res) => {
     
     let user = await User.findOne({ 
         email : req.body.email,
@@ -36,7 +44,7 @@ module.exports.addUser = async( req, res) => {
     res.header('x-auth-token',token).send(_.pick(user, columns));
 }
 
-module.exports.update = async(req, res)=>{
+const update = async(req, res)=>{
     if(req.body.password){
         console.log("password");
         let user = await User.findById(req.body._id);
@@ -51,7 +59,20 @@ module.exports.update = async(req, res)=>{
     res.header('x-auth-token',token).send(_.pick(user, columns));    
 }
 
-module.exports.changePassword = async(req, res) =>{
+
+const updateAdmin = async(data)=>{
+
+    let user = await User.findByIdAndUpdate(data._id, 
+        { ...data }, 
+        { 
+          new : true   
+        }
+    )
+    .select(columns);
+    return user;
+}
+
+const changePassword = async(req, res) =>{
     let user = await User.findById(req.user);
     console.log(req.body);
         
@@ -75,4 +96,15 @@ async function generatePassword(newPassword){
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(newPassword, salt);    
     return password;
+}
+
+module.exports = {
+    columns,
+    getUserMe,
+    getUsers,
+    removeUser,
+    addUser,
+    update,
+    updateAdmin,
+    changePassword
 }

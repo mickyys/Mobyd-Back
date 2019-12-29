@@ -3,7 +3,7 @@ const {
 } = require('../user/user');
 
 const Status = require('../enums/status.enums');
-const columnsDoctors = "_id fullName name lastName email className";
+const columnsDoctors = "_id fullName name lastName email className color";
 
 module.exports.columnsDoctors = columnsDoctors;
 

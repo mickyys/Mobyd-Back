@@ -66,7 +66,11 @@ var User =  Mongoose.Schema({
             type : String
         }
     },
-    company : { type: Mongoose.Schema.Types.ObjectId, ref: 'general' }
+    company : { type: Mongoose.Schema.Types.ObjectId, ref: 'general' },
+    color : {
+        type : String,
+        default : '#631B87'
+    }
 },{
     'toObject' : { virtuals: true },
     'toJSON' : { virtuals: true }

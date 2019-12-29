@@ -16,17 +16,7 @@ async function update(req, res){
 }
 
 async function get(req, res){
-
-    console.log('getpacienteee');
-    
-
-    // let paciente = req.params.paciente;
-    // let result;
-    // if (paciente) {
-    //     result = await PacienteCalendar.find({'status': Status.active, 'paciente' : paciente});
-    // }else{
-       let result = await PacienteCalendar.find({'status': Status.active});
-    // }
+    let result = await PacienteCalendar.find({'status': Status.active});    
     res.status(200).send({ result });
 }
 
