@@ -3,9 +3,20 @@
 const _ = require('lodash');
 const {User} = require('./user')
 const bcrypt = require('bcrypt');
-const Status = require('../enums/status.enums')
+const Status = require('../enums/status.enums');
+const jwt = require('jsonwebtoken');
 
 const columns = ['_id', 'fullName', 'name', 'lastName', 'rut', 'email', 'photo', 'address', 'commune' , 'isAdmin', 'roles', 'operations',  'company', 'color'];
+
+const mailNewUser = async(name, mail) => {    
+    const token =  jwt.sign({ name : name , mail : mail }, process.env.JWT, { expiresIn : '7d' });    
+    return { name : name , mail : mail, token : token };
+}
+
+const mailNewUserValid = async(token) =>{    
+    const result = await jwt.verify(token, process.env.JWT);
+    return result;
+}
 
 const getUserMe = async(req, res) =>{
     const user = await User.findById(req.user).select(columns);
@@ -106,5 +117,7 @@ module.exports = {
     addUser,
     update,
     updateAdmin,
-    changePassword
+    changePassword,
+    mailNewUser, 
+    mailNewUserValid
 }
