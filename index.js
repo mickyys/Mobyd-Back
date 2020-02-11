@@ -14,7 +14,7 @@ if(!process.env.JWT){
     process.exit(1);
 }
 
-let conexion = saslprep(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_BD}`);
+let conexion = saslprep(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}/${process.env.MONGO_BD}`);
 if(process.env.NODE_ENV != 'produccion'){
     conexion = saslprep(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_BD}`);
 }

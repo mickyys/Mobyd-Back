@@ -11,13 +11,12 @@ const examen = require('./examenLaboratorio/examenLaboratorioService');
 const service = require('./servicios/seriviciosServices');
 const historial = require('./historial/historialService');
 
-
-api.use('/:id/calendar', calendar);
-api.use('/:id/tratamiento', tratamiento);
-api.use('/:id/informemedico', informeMedico);
-api.use('/:id/examen', examen);
-api.use('/:id/servicio', service);
-api.use('/:id/historial', historial);
+api.get('/page/:page', auth, asyncMiddleware(async(req, res)=>{
+    let count =  req.query.count ? req.query.count : 10;
+    let name = req.query.name ? req.query.name : null;
+    let result = await paciente.getPacientePage(req.params.page, count, name);
+    res.send(result);
+}));
 
 api.get('/:id?', [auth], asyncMiddleware(async(req, res) =>{
     let result = await paciente.getPaciente(req.params.id);
@@ -25,6 +24,13 @@ api.get('/:id?', [auth], asyncMiddleware(async(req, res) =>{
         result
     });
 }));
+
+api.use('/:id/calendar', calendar);
+api.use('/:id/tratamiento', tratamiento);
+api.use('/:id/informemedico', informeMedico);
+api.use('/:id/examen', examen);
+api.use('/:id/servicio', service);
+api.use('/:id/historial', historial);
 
 api.get('/tutor/:tutor', [auth], asyncMiddleware(paciente.getPacienteTutor));
 api.post('/', [auth], asyncMiddleware(paciente.savePaciente));

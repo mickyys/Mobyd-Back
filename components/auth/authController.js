@@ -14,7 +14,7 @@ module.exports.auth = async( req, res) => {
         status : 1
     }); 
 
-    if(!user)  return res.status(400).send("Usuario o contraseña no valida");
+    if(!user)  return res.status(400).send({ message : "Usuario o contraseña no valida" });
     
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if(!validPassword) return res.status(400).send({ message : "Usuario o contraseña no valida", user : user, error : error } );

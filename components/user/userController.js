@@ -52,7 +52,7 @@ const addUser = async( req, res) => {
     user = await user.save();
 
     const token = user.generateAuthToken();
-    res.header('x-auth-token',token).send(_.pick(user, columns));
+    res.header('x-auth-token', token).send(_.pick(user, columns));
 }
 
 const update = async(req, res)=>{

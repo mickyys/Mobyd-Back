@@ -24,6 +24,32 @@ async function getPaciente(id){
     return result;
 }
 
+const getPacientePage = async(page, count, name) => {
+
+    const pages  = Number(page);
+    const counts = Number(count);
+    let params = {'status' : Status.active };
+
+    if(name){
+        params = {'status' : Status.active , 'name' : new RegExp('^'+name.toUpperCase(), "i")}
+    }
+
+    const patientCount = await Patient.find(params).where("name").ne(null).count();
+
+    const result = await Patient.find(params, columns)
+                    .where("name").ne(null)
+                    .populate('tutor')    
+                    .limit(counts)
+                    .skip(counts * pages)                        
+                    .sort('name');
+
+    return {
+        result,
+        page : pages,
+        pages : Math.trunc(patientCount / counts)
+    }
+}
+
 async function getPatientForName(name){
     return await Patient.findOne({
         name : name
@@ -104,5 +130,6 @@ module.exports = {
     updPaciente,
     delPaciente,
     getPacienteNumber,
-    getPatientForName
+    getPatientForName,
+    getPacientePage
 }
