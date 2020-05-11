@@ -24,8 +24,8 @@ function authorizate() {
     let oAuth2Client = new google.auth.OAuth2(
         client_id, client_secret, redirect_uris[0]);
 
-    oAuth2Client.setCredentials(tokenFile);
-
+    oAuth2Client.setCredentials(tokenFile);    
+        
     return new Promise((resolve, reject) => {
         resolve(google.drive({
             version: 'v3',
@@ -86,39 +86,39 @@ async function uploadGoogleDrive(file) {
 }
 
 async function downloadFile(req, res) {
-    const file = await File.findById(req.params.id);
+    //const file = await File.findById(req.params.id);
     const drive = await authorizate();
+    return drive;
+    // let fileName = config.get("pathFile") + file.name + '.' + file.extension;
+    // let dest = fs.createWriteStream(fileName);
 
-    let fileName = config.get("pathFile") + file.name + '.' + file.extension;
-    let dest = fs.createWriteStream(fileName);
+    // drive.files.get({
+    //     fileId: req.params.id,
+    //     alt: 'media'
+    // }, {
+    //     responseType: 'stream'
+    // }, (err, re) => {
+    //     re.data.on('end', () => {
 
-    drive.files.get({
-        fileId: req.params.id,
-        alt: 'media'
-    }, {
-        responseType: 'stream'
-    }, (err, re) => {
-        re.data.on('end', () => {
-
-                if (req.query.format === 'base64') {
-                    let body = fs.readFileSync(fileName);
-                    const fileBase64 = body.toString('base64');
-                    res.send(fileBase64);
-                    setTimeout(() => {
-                        fs.unlinkSync(fileName);
-                    }, 3000);
-                } else {
-                    res.download(fileName);
-                    setTimeout(() => {
-                        fs.unlinkSync(fileName);
-                    }, 3000);
-                }
-            })
-            .on('error', err => {
-                console.log('Error', err);
-            })
-            .pipe(dest);
-    });
+    //             if (req.query.format === 'base64') {
+    //                 let body = fs.readFileSync(fileName);
+    //                 const fileBase64 = body.toString('base64');
+    //                 res.send(fileBase64);
+    //                 setTimeout(() => {
+    //                     fs.unlinkSync(fileName);
+    //                 }, 3000);
+    //             } else {
+    //                 res.download(fileName);
+    //                 setTimeout(() => {
+    //                     fs.unlinkSync(fileName);
+    //                 }, 3000);
+    //             }
+    //         })
+    //         .on('error', err => {
+    //             console.log('Error', err);
+    //         })
+    //         .pipe(dest);
+    // });
 
 }
 

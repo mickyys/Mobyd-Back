@@ -77,7 +77,7 @@ async function getMailgun(req,res){
 
 async function sendMailReserva(agenda){
 
-  let imgName = 'mobyd.png';
+  let imgName = 'animalhelp.jpg';
   let filename = path.join(__dirname, 'template/img/' + imgName);
   let contents = fs.readFileSync(__dirname + '/template/reservaHoraResponsive.html', 'utf8');
 
@@ -98,9 +98,9 @@ async function sendMailReserva(agenda){
   contents = contents.replace(/{URL}/g, config.get('url'));
 
   const data = {
-    from: "contacto@mobyd.cl",
+    from: "contacto@animalhelp.cl",
     to: agenda.correo,
-    subject: "🐶 Reserva Hora | Mobyd 🐱",
+    subject: "🐶 Reserva Hora | Animnal Help 🐱",
     html : contents,
     inline: filename
   };
